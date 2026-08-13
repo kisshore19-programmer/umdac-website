@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   role TEXT DEFAULT 'user',
+  university TEXT,
+  faculty TEXT,
   major TEXT,
   year_of_study INT,
   semester INT,

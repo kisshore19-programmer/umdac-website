@@ -3,12 +3,23 @@ CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
   INSERT INTO public.profiles (
-    user_id, name, email, major, year_of_study, semester, role, last_login
+    user_id, 
+    name, 
+    email, 
+    university,
+    faculty,
+    major, 
+    year_of_study, 
+    semester, 
+    role, 
+    last_login
   )
   VALUES (
     new.id, 
     COALESCE(new.raw_user_meta_data->>'full_name', ''),
     new.email,
+    new.raw_user_meta_data->>'university',
+    new.raw_user_meta_data->>'faculty',
     new.raw_user_meta_data->>'major',
     (new.raw_user_meta_data->>'year_of_study')::INT,
     (new.raw_user_meta_data->>'semester')::INT,
