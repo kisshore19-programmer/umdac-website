@@ -89,9 +89,9 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
       return { success: false, error: error.message }
     }
 
-  } catch (err: any) {
-    // Catch validation errors thrown by helper functions
-    return { success: false, error: err.message || 'An unexpected error occurred.' }
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'An unexpected error occurred.'
+    return { success: false, error: message }
   }
 
   redirect('/login')
