@@ -28,7 +28,23 @@ export async function middleware(request: NextRequest) {
   )
 
   // Refresh auth session token
-  await supabase.auth.getUser()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  const url = request.nextUrl.clone()
+  const isAuthPage = url.pathname.startsWith('/login') || url.pathname.startsWith('/signup')
+  const isLandingPage = url.pathname === '/'
+
+  // 1. If not logged in and trying to access a protected page -> Redirect to login
+  if (!user && !isAuthPage && !isLandingPage) {
+    url.pathname = '/login'
+    return NextResponse.redirect(url)
+  }
+
+  // 2. If logged in and trying to access login/signup -> Redirect to home/dashboard
+  if (user && isAuthPage) {
+    url.pathname = '/home'
+    return NextResponse.redirect(url)
+  }
 
   return supabaseResponse
 }
