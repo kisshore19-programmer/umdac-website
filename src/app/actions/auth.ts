@@ -68,6 +68,7 @@ export async function signUpAction(formData: FormData): Promise<ActionResponse> 
 
     validate.validateAcademicInfo(yearOfStudy, semester)
 
+
     
     // Supabase Sign Up Call
     const { error } = await supabase.auth.signUp({
