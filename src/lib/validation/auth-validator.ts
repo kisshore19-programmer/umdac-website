@@ -49,7 +49,7 @@ export async function validatePassword(password: string): Promise<void> {
  * Validates the academic bounds for year of study and semester.
  *
  * Enforces year constraints (1 to 7 to accommodate standard and extended programs like Medicine)
- * and semester constraints (1 to 3 to support main semesters and short terms).
+ * and semester constraints (1 to 8).
  *
  * @param {number | null} year - The user's year of study, or null if unprovided.
  * @param {number | null} semester - The user's current semester, or null if unprovided.
@@ -64,11 +64,12 @@ export function validateAcademicInfo(year: number | null, semester: number | nul
   }
 
   if (semester !== null) {
-    if (semester < 1 || semester > 3) {
-      throw new Error('Semester must be between 1 and 3.')
+    if (semester < 1 || semester > 8) {
+      throw new Error('Semester must be between 1 and 8.')
     }
   }
 }
+
 
 /**
  * Retrieves the currently logged-in user from the active Supabase session.
