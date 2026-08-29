@@ -116,7 +116,7 @@ export async function loginAction(formData: FormData) {
   const password = formData.get('password') as string
   validate.validatePassword(password)
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })  
@@ -126,6 +126,17 @@ export async function loginAction(formData: FormData) {
       throw new Error('Invalid email or password.')
     }
     throw new Error(error.message)
+  }
+
+  // Check if authenticated user is an admin
+  if (data.user) {
+    const isAdmin = await isUserAdmin(data.user.id)
+    console.log('User ID:', data.user.id)
+    console.log('Is Admin?:', isAdmin)
+    
+    if (isAdmin) {
+      redirect('/admin')
+    }
   }
 
   redirect('/home')
@@ -139,6 +150,80 @@ export async function loginAction(formData: FormData) {
 export async function logoutAction() {
   const supabase = await createClient()
   await supabase.auth.signOut()
+  redirect('/login')
+}
+
+/**
+ * Checks whether a given user ID possesses the 'admin' role.
+ *
+ * @param {string} userId - The Supabase auth user UUID.
+ * @returns {Promise<boolean>} True if the user's role is 'admin', false otherwise.
+ */
+export async function isUserAdmin(userId: string): Promise<boolean> {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('user_id', userId)
+    .single()
+
+  if (error || !data) {
+    console.error('Supabase Query Error:', error.message)
+    return false
+  }
+
+  return data.role === 'admin'
+}
+
+/**
+ * Triggers a password reset email for the specified user account.
+ *
+ * Sanitizes and validates the recipient's email address and initiates
+ * Supabase's email-based password recovery flow with a redirect URL.
+ *
+ * @param {FormData} formData - The submitted form data containing the target 'email'.
+ * @returns {Promise<{ success: boolean }>} Resolves with a success indicator if the email is dispatched.
+ * @throws {Error} If email validation fails or Supabase encounters an error issuing the reset link.
+ */
+export async function requestPasswordResetAction(formData: FormData) {
+  const supabase = await createClient()
+  const email = await validate.sanitizeAndValidateEmail(formData.get('email'))
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/reset-password`,
+  })
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return { success: true }
+}
+
+/**
+ * Updates the password for the currently authenticated user session.
+ *
+ * Validates the new password string and updates the user's credential details
+ * via Supabase Auth before automatically redirecting to the login page.
+ *
+ * @param {FormData} formData - The submitted form data containing the new 'password'.
+ * @returns {Promise<never>} Automatically redirects to '/login' upon successful update.
+ * @throws {Error} If password validation fails or Supabase fails to update the user account.
+ */
+export async function updatePasswordAction(formData: FormData) {
+  const supabase = await createClient()
+  const password = formData.get('password') as string
+  validate.validatePassword(password)
+
+  const { error } = await supabase.auth.updateUser({
+    password: password,
+  })
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
   redirect('/login')
 }
 
