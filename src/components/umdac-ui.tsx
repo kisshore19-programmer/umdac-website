@@ -2,12 +2,9 @@ import Link from 'next/link'
 
 export const navItems = [
   { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
+  { href: '/about', label: 'About Us' },
   { href: '/events', label: 'Events' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Stories' },
   { href: '/merch', label: 'Merch' },
-  { href: '/faq', label: 'FAQ' },
 ]
 
 export type EventStatus = 'Open' | 'Closing Soon' | 'Full' | 'Closed' | 'Past Event'

@@ -1,16 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 
 const navItems = [
   { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
+  { href: '/about', label: 'About Us' },
   { href: '/events', label: 'Events' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/blog', label: 'Stories' },
   { href: '/merch', label: 'Merch' },
-  { href: '/faq', label: 'FAQ' },
 ]
 
 export function SiteHeader() {
@@ -19,14 +17,15 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-slate-50/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-3" aria-label="UMDAC home">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-sm font-black text-white">
-            U
-          </div>
-          <div>
-            <p className="text-lg font-black tracking-tight text-slate-900">UMDAC</p>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-700">Decode. Transform. Excel.</p>
-          </div>
+        <Link href="/" className="flex items-center" aria-label="UMDAC home">
+          <Image
+            src="/umdac_logo.png"
+            alt="UMDAC Logo"
+            width={120}
+            height={40}
+            className="h-10 w-auto object-contain"
+            priority
+          />
         </Link>
 
         <nav aria-label="Main navigation" className="hidden items-center gap-6 md:flex">

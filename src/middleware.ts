@@ -32,10 +32,16 @@ export async function middleware(request: NextRequest) {
 
   const url = request.nextUrl.clone()
   const isAuthPage = url.pathname.startsWith('/login') || url.pathname.startsWith('/signup')
-  const isLandingPage = url.pathname === '/'
+  
+  // Define public pages that guests can view
+  const isPublicPage = 
+    url.pathname === '/' ||
+    url.pathname.startsWith('/about') ||
+    url.pathname.startsWith('/events') ||
+    url.pathname.startsWith('/merch')
 
   // 1. If not logged in and trying to access a protected page -> Redirect to login
-  if (!user && !isAuthPage && !isLandingPage) {
+  if (!user && !isAuthPage && !isPublicPage) {
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }

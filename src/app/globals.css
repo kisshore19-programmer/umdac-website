@@ -17,7 +17,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: 'Inter', 'Segoe UI', sans-serif;
+  --font-sans: var(--font-dm-sans), sans-serif;
+  --font-display: var(--font-rubik), sans-serif;
   --font-mono: 'SFMono-Regular', 'Consolas', monospace;
 }
 
@@ -29,7 +30,11 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-rubik), sans-serif;
 }
 
 * {
