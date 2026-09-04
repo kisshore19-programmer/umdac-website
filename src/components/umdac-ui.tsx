@@ -64,10 +64,10 @@ export function EventCard({
   href: string
 }) {
   return (
-    <article className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:border-sky-200 hover:shadow-lg">
-      <div className="h-40 bg-gradient-to-br from-sky-600 via-cyan-500 to-indigo-600 p-5 text-white">
+    <article className="group overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]">
+      <div className="h-40 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-5 text-white">
         <div className="flex h-full items-start justify-between gap-3">
-          <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-50">
+          <span className="rounded bg-white/15 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">
             {type}
           </span>
           <StatusBadge status={status} />
@@ -75,14 +75,14 @@ export function EventCard({
       </div>
       <div className="space-y-4 p-5">
         <div>
-          <p className="text-sm font-medium text-sky-700">{date}</p>
-          <h3 className="mt-2 text-xl font-semibold text-slate-900">{title}</h3>
+          <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">{date}</p>
+          <h3 className="mt-2 text-xl font-black uppercase tracking-tight text-slate-900">{title}</h3>
         </div>
-        <p className="text-sm text-slate-600">{location}</p>
+        <p className="text-sm font-medium text-slate-500">{location}</p>
         <p className="text-sm leading-6 text-slate-600">{description}</p>
         <Link
           href={href}
-          className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+          className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-px"
         >
           View details
         </Link>
