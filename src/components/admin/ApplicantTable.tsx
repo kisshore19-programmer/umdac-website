@@ -14,7 +14,7 @@ export default function ApplicantTable({ initialApplicants }: Props) {
         return 'bg-emerald-100 text-emerald-800'
       case 'rejected':
         return 'bg-rose-100 text-rose-800'
-      case 'under review':
+      case 'pending':
         return 'bg-blue-100 text-blue-800'
       default:
         return 'bg-amber-100 text-amber-800'
