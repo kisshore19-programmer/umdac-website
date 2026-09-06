@@ -63,82 +63,96 @@ export default async function EventDetailPage({ params }: EventPageProps) {
   }
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm">
-        <div className="h-56 bg-gradient-to-br from-sky-600 via-cyan-500 to-indigo-600 p-6 text-white">
+    <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
+
+      {/* Hero banner */}
+      <div className="overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
+        <div className="h-56 p-6 text-white md:p-10">
           <div className="flex h-full items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-100">{event.type}</p>
-              <h1 className="mt-3 text-3xl font-bold md:text-5xl">{event.title}</h1>
+              <span className="inline-flex items-center rounded bg-white/15 px-2.5 py-1 text-xs font-extrabold uppercase tracking-widest text-white">
+                {event.type}
+              </span>
+              <h1 className="mt-3 text-3xl font-black uppercase tracking-tight text-white md:text-5xl">
+                {event.title}
+              </h1>
             </div>
-            <span className="rounded-full bg-white/15 px-3 py-1 text-sm font-semibold text-sky-50">
+            <span className="shrink-0 rounded border-2 border-white/30 bg-white/15 px-3 py-1.5 text-sm font-extrabold uppercase tracking-wider text-white">
               {event.status}
             </span>
           </div>
         </div>
+      </div>
 
-        <div className="grid gap-8 p-6 md:p-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <div>
-            <div className="rounded-2xl border border-sky-100 bg-sky-50 p-4">
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-700">Registration status</p>
-              <p className="mt-2 text-base text-slate-700">{event.notice}</p>
-            </div>
+      {/* Content grid */}
+      <div className="mt-8 grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
 
-            <p className="mt-6 text-base leading-8 text-slate-600">{event.description}</p>
-
-            <div className="mt-8">
-              <h2 className="text-xl font-semibold text-slate-900">What to expect</h2>
-              <ul className="mt-4 space-y-3 text-slate-600">
-                {event.checklist.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span className="mt-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-sky-100 text-xs font-bold text-sky-700">✓</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {/* Main content */}
+        <div>
+          {/* Notice banner */}
+          <div className="rounded-xl border-2 border-slate-900 bg-indigo-50 p-4 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+            <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">Registration status</p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-700">{event.notice}</p>
           </div>
 
-          <aside className="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-            <h2 className="text-xl font-semibold text-slate-900">Event details</h2>
-            <dl className="mt-5 space-y-4 text-sm text-slate-600">
-              <div>
-                <dt className="font-semibold text-slate-900">Date</dt>
-                <dd className="mt-1">{event.date}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-900">Time</dt>
-                <dd className="mt-1">{event.time}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-900">Venue</dt>
-                <dd className="mt-1">{event.location}</dd>
-              </div>
-              <div>
-                <dt className="font-semibold text-slate-900">Availability</dt>
-                <dd className="mt-1">{event.seats}</dd>
-              </div>
-            </dl>
+          <p className="mt-6 text-base leading-8 text-slate-600">{event.description}</p>
 
+          {/* Checklist */}
+          <div className="mt-8">
+            <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">What to expect</h2>
+            <ul className="mt-4 space-y-3">
+              {event.checklist.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-xs font-black text-white shadow-[1px_1px_0px_0px_rgba(15,23,42,1)]">
+                    ✓
+                  </span>
+                  <span className="text-sm leading-relaxed text-slate-600">{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <aside className="rounded-2xl border-2 border-slate-900 bg-slate-50 p-5 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] h-fit">
+          <h2 className="text-lg font-black uppercase tracking-tight text-slate-900">Event details</h2>
+          <dl className="mt-5 space-y-4 text-sm">
+            <div>
+              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500">Date</dt>
+              <dd className="mt-1 font-semibold text-slate-900">{event.date}</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500">Time</dt>
+              <dd className="mt-1 font-semibold text-slate-900">{event.time}</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500">Venue</dt>
+              <dd className="mt-1 font-semibold text-slate-900">{event.location}</dd>
+            </div>
+            <div>
+              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500">Availability</dt>
+              <dd className="mt-1 font-semibold text-slate-900">{event.seats}</dd>
+            </div>
+          </dl>
+
+          <div className="mt-6 flex flex-col gap-3">
             <button
+              id={`event-register-${id}`}
               type="button"
-              className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+              className="inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-3 text-sm font-extrabold uppercase tracking-wider text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-px focus:outline-none"
             >
               {event.cta}
             </button>
 
-            <button
-              type="button"
-              className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            <Link
+              href="/events"
+              className="inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-white px-4 py-3 text-sm font-extrabold uppercase tracking-wider text-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-px focus:outline-none"
             >
-              Save for later
-            </button>
-
-            <Link href="/events" className="mt-3 inline-flex w-full items-center justify-center rounded-full border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2">
-              Back to events
+              ← Back to events
             </Link>
-          </aside>
-        </div>
+          </div>
+        </aside>
+
       </div>
     </main>
   )
