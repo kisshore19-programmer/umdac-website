@@ -24,8 +24,8 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-6xl items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="grid w-full overflow-hidden rounded-[2rem] border border-fuchsia-200/20 bg-white shadow-xl lg:grid-cols-2">
-        <div className="bg-gradient-to-br from-[#2A1338] via-[#4B2263] to-[#75349B] p-8 text-white md:p-10">
+      <div className="grid w-full overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl lg:grid-cols-2">
+        <div className="bg-[#4A1D67] p-8 text-white md:p-10">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-200">Welcome back</p>
           <h1 className="mt-4 text-4xl font-black tracking-tight">Access your UMDAC account</h1>
           <p className="mt-4 max-w-md text-base leading-7 text-fuchsia-100">
@@ -38,7 +38,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="p-6 md:p-10 bg-[#FAF5FF]">
+        <div className="p-6 md:p-10 bg-white">
           <div className="mb-8 flex justify-between items-start">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-700">Login</p>
@@ -68,9 +68,9 @@ export default function LoginPage() {
                 name="email"
                 type="email"
                 autoComplete="email"
-                placeholder="student@um.edu.my"
+                placeholder="testing123@gmail.com"
                 required
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-200"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-900 outline-none transition focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-200"
               />
             </div>
 
@@ -83,16 +83,16 @@ export default function LoginPage() {
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                placeholder="Enter your password"
+                placeholder="••••••••••••••"
                 required
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-900 outline-none transition focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-200"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-base text-slate-900 outline-none transition focus:border-fuchsia-500 focus:ring-2 focus:ring-fuchsia-200"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#B768E9] to-[#8C1DEE] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex w-full items-center justify-center rounded-full bg-[#A338F5] px-4 py-3 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {loading ? 'Authenticating...' : 'Login'}
             </button>

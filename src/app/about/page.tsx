@@ -43,20 +43,20 @@ export default function AboutPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <div className="rounded-2xl bg-slate-50 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Mission</p>
+          <div className="rounded-2xl bg-[#F8FAFC] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9E37E8]">Mission</p>
             <p className="mt-4 text-base leading-7 text-slate-600">
               To make data and analytics skills accessible, practical, and empowering for all students.
             </p>
           </div>
-          <div className="rounded-2xl bg-slate-50 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Purpose</p>
+          <div className="rounded-2xl bg-[#F8FAFC] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9E37E8]">Purpose</p>
             <p className="mt-4 text-base leading-7 text-slate-600">
               To empower members through projects, workshops, mentorship, and meaningful community building.
             </p>
           </div>
-          <div className="rounded-2xl bg-slate-50 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Impact</p>
+          <div className="rounded-2xl bg-[#F8FAFC] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#9E37E8]">Impact</p>
             <p className="mt-4 text-base leading-7 text-slate-600">
               To connect theory with application so members can grow into confident, industry-ready contributors.
             </p>
@@ -85,10 +85,10 @@ export default function AboutPage() {
             ))}
           </div>
 
-          <aside className="rounded-[2rem] border border-fuchsia-200/20 bg-gradient-to-br from-[#2A1338] to-[#4B2263] p-6 text-white shadow-xl">
+          <aside className="rounded-[2rem] border border-[#9E37E8]/20 bg-[#4C1D6E] p-6 text-white shadow-xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-200">Selected member</p>
             <div className="mt-6 flex items-center gap-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-fuchsia-100 text-lg font-bold text-fuchsia-900">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-lg font-bold text-[#4C1D6E]">
                 {selected.name
                   .split(' ')
                   .slice(0, 2)

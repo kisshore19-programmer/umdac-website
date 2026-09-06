@@ -111,14 +111,14 @@ export function CommitteeCard({
       type="button"
       onClick={onSelect}
       aria-pressed={isSelected}
-      className={`group w-full rounded-2xl border p-4 text-left shadow-sm transition hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 ${
+      className={`group w-full rounded-2xl border p-4 text-left shadow-sm transition hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-[#9E37E8] focus:ring-offset-2 ${
         isSelected
-          ? 'border-fuchsia-300 bg-fuchsia-50 shadow-md'
-          : 'border-slate-200 bg-white hover:border-fuchsia-200 hover:shadow-md'
+          ? 'border-[#9E37E8] bg-[#F8FAFC] shadow-md'
+          : 'border-slate-200 bg-white hover:border-[#9E37E8]/50 hover:shadow-md'
       }`}
     >
       <div className="flex items-center gap-4">
-        <div className={`flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br text-lg font-bold ${isSelected ? 'from-fuchsia-600 to-purple-500 text-white' : 'from-fuchsia-100 to-purple-100 text-fuchsia-700'}`}>
+        <div className={`flex h-16 w-16 items-center justify-center rounded-full text-lg font-bold ${isSelected ? 'bg-[#9E37E8] text-white' : 'bg-fuchsia-100 text-fuchsia-700'}`}>
           {name
             .split(' ')
             .slice(0, 2)
