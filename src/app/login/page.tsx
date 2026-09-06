@@ -44,9 +44,9 @@ export default function LoginPage() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-fuchsia-700">Login</p>
               <h2 className="mt-3 text-3xl font-bold text-slate-900">Sign in</h2>
             </div>
-            <Link 
-              href="/admin" 
-              className="rounded-lg bg-fuchsia-100 px-3 py-1.5 text-xs font-semibold text-fuchsia-800 transition hover:bg-fuchsia-200"
+            <Link
+              href="/admin"
+              className="rounded-lg bg-fuchsia-100 px-3 py-1.5 text-xs font-semibold text-fuchsia-800 transition hover:bg-fuchsia-200 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2 focus:ring-offset-[#FAF5FF]"
             >
               Admin Login
             </Link>
