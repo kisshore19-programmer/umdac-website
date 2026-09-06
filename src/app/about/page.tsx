@@ -44,19 +44,19 @@ export default function AboutPage() {
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           <div className="rounded-2xl bg-slate-50 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Mission</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Mission</p>
             <p className="mt-4 text-base leading-7 text-slate-600">
               To make data and analytics skills accessible, practical, and empowering for all students.
             </p>
           </div>
           <div className="rounded-2xl bg-slate-50 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Purpose</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Purpose</p>
             <p className="mt-4 text-base leading-7 text-slate-600">
               To empower members through projects, workshops, mentorship, and meaningful community building.
             </p>
           </div>
           <div className="rounded-2xl bg-slate-50 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">Impact</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-700">Impact</p>
             <p className="mt-4 text-base leading-7 text-slate-600">
               To connect theory with application so members can grow into confident, industry-ready contributors.
             </p>
@@ -85,10 +85,10 @@ export default function AboutPage() {
             ))}
           </div>
 
-          <aside className="rounded-[2rem] border border-slate-200 bg-slate-900 p-6 text-white shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">Selected member</p>
+          <aside className="rounded-[2rem] border border-fuchsia-200/20 bg-gradient-to-br from-[#2A1338] to-[#4B2263] p-6 text-white shadow-xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fuchsia-200">Selected member</p>
             <div className="mt-6 flex items-center gap-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-sky-100 text-lg font-bold text-sky-700">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-fuchsia-100 text-lg font-bold text-fuchsia-900">
                 {selected.name
                   .split(' ')
                   .slice(0, 2)
@@ -97,11 +97,11 @@ export default function AboutPage() {
               </div>
               <div>
                 <h3 className="text-2xl font-semibold">{selected.name}</h3>
-                <p className="text-sm text-sky-200">{selected.role}</p>
+                <p className="text-sm text-fuchsia-200">{selected.role}</p>
               </div>
             </div>
-            <p className="mt-6 text-base leading-7 text-slate-200">“{selected.quote}”</p>
-            <div className="mt-8 space-y-4 rounded-2xl bg-white/5 p-4 text-sm text-slate-200">
+            <p className="mt-6 text-base leading-7 text-fuchsia-50">“{selected.quote}”</p>
+            <div className="mt-8 space-y-4 rounded-2xl bg-white/10 p-4 text-sm text-fuchsia-100 backdrop-blur-sm">
               <div>
                 <p className="font-semibold text-white">Department</p>
                 <p className="mt-2">{selected.department}</p>

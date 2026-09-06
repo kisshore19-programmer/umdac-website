@@ -33,7 +33,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-slate-600 transition hover:text-sky-700"
+              className="text-sm font-medium text-slate-600 transition hover:text-fuchsia-700"
             >
               {item.label}
             </Link>
@@ -43,13 +43,13 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             href="/login"
-            className="hidden rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700 sm:inline-flex"
+            className="hidden rounded-full border border-fuchsia-300 bg-white px-4 py-2 text-sm font-semibold text-fuchsia-900 transition hover:border-fuchsia-500 hover:text-fuchsia-700 sm:inline-flex"
           >
             Login
           </Link>
           <Link
             href="/signup"
-            className="inline-flex items-center justify-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#B768E9] to-[#8C1DEE] px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2"
           >
             Join now
           </Link>
@@ -58,7 +58,7 @@ export function SiteHeader() {
             aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((current) => !current)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-800 transition hover:border-sky-300 hover:text-sky-700 md:hidden focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-800 transition hover:border-fuchsia-300 hover:text-fuchsia-700 md:hidden focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:ring-offset-2"
           >
             {mobileOpen ? '×' : '☰'}
           </button>
@@ -73,7 +73,7 @@ export function SiteHeader() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-sky-700"
+                className="rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 hover:text-fuchsia-700"
               >
                 {item.label}
               </Link>
@@ -81,7 +81,7 @@ export function SiteHeader() {
             <Link
               href="/login"
               onClick={() => setMobileOpen(false)}
-              className="mt-2 rounded-xl border border-slate-300 px-3 py-2 text-center text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700"
+              className="mt-2 rounded-xl border border-slate-300 px-3 py-2 text-center text-sm font-semibold text-slate-800 transition hover:border-fuchsia-300 hover:text-fuchsia-700"
             >
               Login
             </Link>
