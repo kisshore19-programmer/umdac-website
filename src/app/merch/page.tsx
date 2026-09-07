@@ -1,69 +1,60 @@
 import type { Metadata } from 'next'
-import { MerchCard } from '@/components/umdac-ui'
+import { createClient } from '@/lib/supabase/server'
+import { MerchGrid } from './merch-grid'
+import type { MerchItem } from './merch-modal'
 
 export const metadata: Metadata = {
   title: 'Merch | UMDAC',
   description: "Support the club and take home a keepsake that reflects UMDAC's identity & community.",
 }
 
-const merchItems = [
-  {
-    name: 'UMDAC Standard Tee',
-    price: 'RM 45',
-    status: 'Available' as const,
-    description: 'Premium cotton tee with the club logo and data-inspired details for everyday wear.',
-  },
-  {
-    name: 'UMDAC Hoodie',
-    price: 'RM 85',
-    status: 'Limited' as const,
-    description: 'A lightweight fleece hoodie for campus life and project nights.',
-  },
-  {
-    name: 'UMDAC Notebook',
-    price: 'RM 25',
-    status: 'Out of stock' as const,
-    description: 'A compact field notebook for notes during events and study sessions.',
-  },
-  {
-    name: 'UMDAC Enamel Pin',
-    price: 'RM 15',
-    status: 'Available' as const,
-    description: 'A compact enamel pin that lets you rep UMDAC wherever you go.',
-  },
-  {
-    name: 'UMDAC Laptop Bag',
-    price: 'RM 115',
-    status: 'Out of stock' as const,
-    description: 'Keep your laptop protected in style with its sleek design for daily campus carry.',
-  },
-]
+export default async function MerchPage() {
+  const supabase = await createClient()
 
-export default function MerchPage() {
+  const { data, error } = await supabase
+    .from('merch')
+    .select('merch_id, name, description, price, image_url')
+    .eq('is_active', true)
+    .order('created_at', { ascending: true })
+
+  const items: MerchItem[] = (error ? [] : data ?? []).map((row) => ({
+    merch_id: row.merch_id,
+    name: row.name,
+    description: row.description ?? null,
+    price: row.price,
+    image_url: row.image_url ?? null,
+  }))
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-200 via-pink-300 to-purple-700 px-4 py-16">
-      <div className="mx-auto max-w-5xl">
+    <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
-        {/* Heading */}
-        <div className="mb-14 text-center">
-          <h1 className="text-5xl font-black tracking-tight text-purple-900 md:text-6xl">
-            Our Merchandise
+      {/* Page header — matches home page hero card style */}
+      <section className="flex min-h-[225px] flex-col justify-center overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:min-h-[255px] md:p-10">
+        <div className="max-w-2xl">
+          <h1 className="text-4xl font-black uppercase tracking-tight text-white md:text-6xl">
+            Our{' '}
+            <span className="bg-white bg-clip-text text-transparent drop-shadow">
+              Merch.
+            </span>
           </h1>
-          {/* Decorative divider */}
-          <div className="mx-auto mt-4 h-px w-48 bg-purple-400/50" />
-          <p className="mx-auto mt-5 max-w-md text-sm leading-relaxed text-slate-700">
+          <p className="mt-5 max-w-md text-sm font-semibold leading-relaxed text-white/80">
             Support the club and take home a keepsake that reflects UMDAC&apos;s identity &amp; community.
           </p>
         </div>
+      </section>
 
-        {/* Merch grid */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {merchItems.map((item) => (
-            <MerchCard key={item.name} {...item} />
-          ))}
+      {/* Section label */}
+      <section className="mt-14">
+        <div className="mb-8">
+          <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900 md:text-4xl">
+            Available Items
+          </h2>
         </div>
 
-      </div>
-    </div>
+        {/* Grid — client component manages modal state */}
+        <MerchGrid items={items} />
+      </section>
+
+    </main>
   )
 }
