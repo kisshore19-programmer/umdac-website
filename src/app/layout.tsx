@@ -1,22 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Rubik, DM_Sans } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
 import './globals.css'
 
-const rubik = Rubik({
+const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800', '900'],
-  variable: '--font-rubik',
-})
-
-const dmSans = DM_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  weight: ['400', '500', '700'],
-  variable: '--font-dm-sans',
+  variable: '--font-inter',
 })
 
 export const metadata: Metadata = {
@@ -33,7 +25,7 @@ const navItems = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${rubik.variable} ${dmSans.variable} h-full bg-slate-50 text-slate-900`}>
+    <html lang="en" className={`${inter.variable} h-full bg-slate-50 text-slate-900`}>
       <body className="min-h-full bg-slate-50 text-slate-900 antialiased font-sans">
         <div className="min-h-screen">
           <SiteHeader />
