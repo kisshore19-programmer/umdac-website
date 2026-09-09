@@ -31,7 +31,10 @@ export async function middleware(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   const url = request.nextUrl.clone()
-  const isAuthPage = url.pathname.startsWith('/login') || url.pathname.startsWith('/signup')
+  const isAuthPage = 
+    url.pathname.startsWith('/login') || 
+    url.pathname.startsWith('/signup') || 
+    url.pathname === '/admin/login'
   
   // Define public pages that guests can view
   const isPublicPage = 
@@ -40,15 +43,23 @@ export async function middleware(request: NextRequest) {
     url.pathname.startsWith('/events') ||
     url.pathname.startsWith('/merch')
 
-  // 1. If not logged in and trying to access a protected page -> Redirect to login
+  // 1. If not logged in and trying to access a protected page -> Redirect to appropriate login
   if (!user && !isAuthPage && !isPublicPage) {
-    url.pathname = '/login'
+    if (url.pathname.startsWith('/admin')) {
+      url.pathname = '/admin/login'
+    } else {
+      url.pathname = '/login'
+    }
     return NextResponse.redirect(url)
   }
 
   // 2. If logged in and trying to access login/signup -> Redirect to home/dashboard
   if (user && isAuthPage) {
-    url.pathname = '/home'
+    if (url.pathname === '/admin/login') {
+      url.pathname = '/admin'
+    } else {
+      url.pathname = '/home'
+    }
     return NextResponse.redirect(url)
   }
 

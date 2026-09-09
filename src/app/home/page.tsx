@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { EventCard, SectionHeading } from '@/components/umdac-ui'
+import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 const featuredEvents = [
   {
@@ -75,6 +77,24 @@ export default function HomePage() {
   const [introFinished, setIntroFinished] = useState(false)
   const [introSrc, setIntroSrc] = useState('')
   const [imageLoaded, setImageLoaded] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+    })
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [])
 
   useEffect(() => {
     // Force browser to bypass cache for the animated WebP to ensure it plays from the beginning on mount
@@ -213,19 +233,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Join Callout Section */}
-      <section className="mt-20 rounded-2xl border-4 border-slate-900 bg-slate-950 px-6 py-10 text-white shadow-[8px_8px_0px_0px_rgba(168,85,247,1)] md:px-10">
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-          <div>
-            <p className="text-xs font-black uppercase tracking-widest text-pink-400">BECOME A MEMBER</p>
-            <h2 className="mt-2 text-2xl font-black uppercase tracking-tight md:text-3xl">Ready to decode, transform, and excel?</h2>
-            <p className="mt-2 text-sm text-slate-400">Join our student community and kickstart your data journey today.</p>
+      {/* Join Callout Section - Only displayed for unauthenticated visitors */}
+      {!user ? (
+        <section className="mt-20 rounded-2xl border-4 border-slate-900 bg-slate-950 px-6 py-10 text-white shadow-[8px_8px_0px_0px_rgba(168,85,247,1)] md:px-10">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-xs font-black uppercase tracking-widest text-pink-400">BECOME A MEMBER</p>
+              <h2 className="mt-2 text-2xl font-black uppercase tracking-tight md:text-3xl">Ready to decode, transform, and excel?</h2>
+              <p className="mt-2 text-sm text-slate-400">Join our student community and kickstart your data journey today.</p>
+            </div>
+            <Link href="/signup" className="inline-flex items-center justify-center rounded-lg border-2 border-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider text-white transition hover:bg-white hover:text-slate-900 active:translate-y-[1px]">
+              Join UMDAC
+            </Link>
           </div>
-          <Link href="/signup" className="inline-flex items-center justify-center rounded-lg border-2 border-white bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider text-white transition hover:bg-white hover:text-slate-900 active:translate-y-[1px]">
-            Join UMDAC
-          </Link>
-        </div>
-      </section>
+        </section>
+      ) : null}
     </main>
   )
 }
