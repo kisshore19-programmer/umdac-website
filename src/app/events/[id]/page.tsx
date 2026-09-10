@@ -16,7 +16,7 @@ const eventDetails: Record<string, { title: string; date: string; time: string; 
   },
   'ai-society-panel': {
     title: 'AI & Society Panel',
-    date: '2 November 2026',
+    date: '2 November 2026',  
     time: '6:30 PM – 8:00 PM',
     location: 'Dewan Perdana',
     type: 'Panel',
