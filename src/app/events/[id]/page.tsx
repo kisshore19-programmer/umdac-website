@@ -1,44 +1,70 @@
 import Link from 'next/link'
 
 const eventDetails: Record<string, { title: string; date: string; time: string; location: string; type: string; seats: string; status: string; description: string; checklist: string[]; cta: string; notice: string }> = {
-  'data-debut-2026': {
-    title: 'Data Debut 2026',
-    date: '18 October 2026',
-    time: '10:00 AM – 1:00 PM',
-    location: 'Faculty of Computer Science, UM',
-    type: 'Workshop',
-    seats: '42 seats available',
+  'startup-bootcamp': {
+    title: 'Startup Bootcamp',
+    date: 'TBA',
+    time: 'TBA',
+    location: 'TBA',
+    type: 'Bootcamp',
+    seats: 'TBA',
     status: 'Open',
-    description: 'This entry-level workshop introduces students to the fundamentals of analytics with a focus on spreadsheet fluency, exploratory analysis, and communicating insights clearly.',
-    checklist: ['Beginner-friendly session', 'Hands-on exercises', 'Data storytelling guidance', 'Certificate of participation'],
-    cta: 'Register for Data Debut',
+    description: 'Learn how to build and scale your ideas in our intensive startup bootcamp designed for student founders.',
+    checklist: ['Beginner-friendly session', 'Hands-on exercises', 'Mentorship opportunity', 'Certificate of participation'],
+    cta: 'Register for Bootcamp',
     notice: 'Login is required before a registration can be submitted.',
   },
-  'ai-society-panel': {
-    title: 'AI & Society Panel',
-    date: '2 November 2026',
-    time: '6:30 PM – 8:00 PM',
-    location: 'Dewan Perdana',
-    type: 'Panel',
-    seats: '18 spots left',
-    status: 'Closing Soon',
-    description: 'Join practitioners and campus leaders for a discussion on AI, ethics, readiness, and opportunities across industries and research. The session is designed to introduce students to the broader context behind AI adoption.',
-    checklist: ['Industry speakers', 'Q&A session', 'Networking opportunity', 'Career exposure'],
-    cta: 'Reserve a seat',
-    notice: 'Registration closes soon. Members are encouraged to confirm early.',
+  'datathon': {
+    title: 'Datathon',
+    date: 'TBA',
+    time: 'TBA',
+    location: 'TBA',
+    type: 'Competition',
+    seats: 'TBA',
+    status: 'Open',
+    description: 'A challenge to solve real-world problems using data analytics, machine learning, and storytelling.',
+    checklist: ['Team formation', 'Industry speakers', 'Mentorship opportunity', 'Cash prizes'],
+    cta: 'Register for Datathon',
+    notice: 'Login is required before a registration can be submitted.',
   },
-  'project-sprint-night': {
-    title: 'Project Sprint Night',
-    date: '15 November 2026',
-    time: '7:00 PM – 9:30 PM',
-    location: 'Innovation Lab',
-    type: 'Hack Night',
-    seats: 'Waitlist open',
-    status: 'Full',
-    description: 'An evening for building, refining, and validating ideas with a supportive peer environment. Members can work on initial prototypes, validate assumptions, and prepare for upcoming showcases.',
-    checklist: ['Team formation', 'Prototype support', 'Mentor feedback', 'Project idea validation'],
-    cta: 'Join the waitlist',
-    notice: 'This event is currently full, but the waitlist is open for interested members.',
+  'datafair': {
+    title: 'DataFair',
+    date: 'TBA',
+    time: 'TBA',
+    location: 'TBA',
+    type: 'Fair',
+    seats: 'TBA',
+    status: 'Open',
+    description: 'Connect with industry professionals, explore career opportunities, and discover the latest in data technology.',
+    checklist: ['Networking opportunity', 'Career exposure', 'Industry speakers', 'Resume review'],
+    cta: 'Reserve a seat',
+    notice: 'Login is required before a registration can be submitted.',
+  },
+  'data-debut-2025': {
+    title: 'Data Debut 2025',
+    date: '12 October 2025',
+    time: '9:00 AM – 5:00 PM',
+    location: 'Faculty of Computer Science, UM',
+    type: 'Workshop',
+    seats: 'Event Concluded',
+    status: 'Past Event',
+    description: 'Our annual introductory workshop introducing 300+ students to data analytics paths and tools.',
+    checklist: [],
+    cta: 'View gallery',
+    notice: '',
+  },
+  'datathon-2025': {
+    title: 'UMDAC Datathon 2025',
+    date: '5 December 2025',
+    time: '8:00 AM – 8:00 PM (48 Hours)',
+    location: 'Dewan Tunku Canselor',
+    type: 'Competition',
+    seats: 'Event Concluded',
+    status: 'Past Event',
+    description: 'A 48-hour challenge solving real-world mobility and energy forecasting problems with industry mentors.',
+    checklist: [],
+    cta: 'View gallery',
+    notice: '',
   },
 }
 
@@ -89,28 +115,51 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
         {/* Main content */}
         <div>
-          {/* Notice banner */}
-          <div className="rounded-xl border-2 border-slate-900 bg-indigo-50 p-4 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-            <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">Registration status</p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-700">{event.notice}</p>
-          </div>
+          {event.status === 'Past Event' ? (
+            <>
+              <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">Event Write-up</h2>
+                <p className="mt-4 text-base leading-8 text-slate-600">[Placeholder for event write-up: A brief summary of what happened, who spoke, and the main takeaways.]</p>
+              </div>
 
-          <p className="mt-6 text-base leading-8 text-slate-600">{event.description}</p>
+              <div className="mt-8">
+                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">Gallery</h2>
+                <div className="mt-4 grid grid-cols-2 gap-4">
+                  <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                    <span className="text-xs font-bold uppercase tracking-widest text-slate-400">[Image 1]</span>
+                  </div>
+                  <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                    <span className="text-xs font-bold uppercase tracking-widest text-slate-400">[Image 2]</span>
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Notice banner */}
+              <div className="rounded-xl border-2 border-slate-900 bg-indigo-50 p-4 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">Registration status</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-700">{event.notice}</p>
+              </div>
 
-          {/* Checklist */}
-          <div className="mt-8">
-            <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">What to expect</h2>
-            <ul className="mt-4 space-y-3">
-              {event.checklist.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-xs font-black text-white shadow-[1px_1px_0px_0px_rgba(15,23,42,1)]">
-                    ✓
-                  </span>
-                  <span className="text-sm leading-relaxed text-slate-600">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+              <p className="mt-6 text-base leading-8 text-slate-600">{event.description}</p>
+
+              {/* Checklist */}
+              <div className="mt-8">
+                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">What to expect</h2>
+                <ul className="mt-4 space-y-3">
+                  {event.checklist.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-xs font-black text-white shadow-[1px_1px_0px_0px_rgba(15,23,42,1)]">
+                        ✓
+                      </span>
+                      <span className="text-sm leading-relaxed text-slate-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Sidebar */}
