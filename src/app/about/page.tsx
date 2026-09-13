@@ -2,32 +2,107 @@
 
 import { useState } from 'react'
 
-const committee = [
+type Member = { name: string; role: string }
+type DepartmentGroup = { department: string; members: Member[] }
+
+const committeeByDepartment: DepartmentGroup[] = [
   {
-    name: 'Aisha Rahman',
-    role: 'President',
-    department: 'Data Science',
-    quote: 'We build a student community where curiosity leads to confidence.',
+    department: 'High Committee',
+    members: [
+      { name: 'Amer Hakim bin Ahmad Kamal Ariffin', role: 'President' },
+      { name: 'Sanjeevan A/L Kumareson', role: 'Vice President' },
+      { name: 'Harshini A/P Kumara Vell', role: 'Secretary' },
+      { name: 'Narmathaa A/P Selvakumaran', role: 'Vice Secretary' },
+      { name: 'Tronan A/L Rejendran', role: 'Treasurer' },
+      { name: 'Nia Zahra binti Shamsul Muhardzi', role: 'Vice Treasurer' },
+    ],
   },
   {
-    name: 'Kok Wei Lim',
-    role: 'Vice President',
-    department: 'Computer Science',
-    quote: 'Strong fundamentals and real project experience make the difference.',
+    department: 'Creative & Marketing',
+    members: [
+      { name: 'Wong Lin Wei', role: 'Director' },
+      { name: 'Yeong Kai Wen', role: 'Vice Director' },
+      { name: 'Lau Hiap Meng', role: 'Creative Design Associate' },
+      { name: 'Kam Pue Shan', role: 'Creative Design Associate' },
+      { name: 'Eireen Syafeeya Binti Efizan', role: 'Creative Design Associate' },
+      { name: 'Tahzib Farhan', role: 'Creative Design Associate' },
+      { name: 'Nur Fatnin Jazmina Binti Jimmy', role: 'Creative Design Associate' },
+      { name: 'Liaw Kai Ze', role: 'Creative Design Associate' },
+      { name: 'Naura Aliyyah Arif', role: 'Creative Design Associate' },
+      { name: 'Lim Jia Qian', role: 'Creative Design Associate' },
+      { name: 'Khe Jia Kang', role: 'Marketing Associate' },
+      { name: 'Lean Wen Jie', role: 'Marketing Associate' },
+      { name: 'Muhammad Fadil Saputra Wijaya', role: 'Marketing Associate' },
+      { name: 'Wong E Jeff Japheth', role: 'Marketing Associate' },
+    ],
   },
   {
-    name: 'Nadia Ismail',
-    role: 'Events Lead',
-    department: 'Statistics',
-    quote: 'Meaningful learning experiences should be accessible, inclusive, and practical.',
+    department: 'Engagement & Development',
+    members: [
+      { name: 'Tan Yi Jing', role: 'Director' },
+      { name: 'Cyrus Lau Lik Hang', role: 'Strategy Support Associate' },
+      { name: 'Yamuna A/P Palani', role: 'Strategy Support Associate' },
+      { name: 'Tang Yong Chun', role: 'Engagement Programmes Associate' },
+      { name: 'Aleeya Nazneen Binti Ahmed Nazri', role: 'Engagement Programmes Associate' },
+      { name: 'Jasmine Chin Ying Hui', role: 'Engagement Programmes Associate' },
+    ],
   },
   {
-    name: 'Hafiz Tan',
-    role: 'Partnerships Manager',
-    department: 'Business Analytics',
-    quote: 'When members connect with industry, opportunities become tangible.',
+    department: 'Strategic Partnership & Relations',
+    members: [
+      { name: 'Nazhan Fahim Bin Mohammad Najib', role: 'Director' },
+      { name: 'Muhammad Adam Harith Bin Mohd Zaki', role: 'Strategic Partnership & Relations Associate' },
+      { name: 'Amirul Hisyam Bin Amir Ruddin', role: 'Strategic Partnership & Relations Associate' },
+      { name: 'Iman Amirul Hakim Bin Badlishah', role: 'Strategic Partnership & Relations Associate' },
+      { name: 'Lee Xin Yi', role: 'Strategic Partnership & Relations Associate' },
+      { name: 'Elvira Natasha Neilson', role: 'Strategic Partnership & Relations Associate' },
+    ],
+  },
+  {
+    department: 'Logistics & Execution',
+    members: [
+      { name: 'Mohammad Farhad Zidane Bin Mohammad Firdaus', role: 'Director' },
+      { name: 'Chin Kin Hiung', role: 'Logistics Associate' },
+      { name: 'Muhammad Fathi Nuqman Bin Abd. Hakim', role: 'Logistics Associate' },
+      { name: 'Mahardika Malik', role: 'Logistics Associate' },
+      { name: 'Aly Zakki Yaza', role: 'Logistics Associate' },
+      { name: 'Ng Yue Qhi', role: 'Logistics Associate' },
+      { name: 'Aiman Nur Haikal Bin Norazmi', role: 'Logistics Associate' },
+      { name: 'Muhammad Naqiuddin Bin Jani', role: 'Logistics Associate' },
+    ],
+  },
+  {
+    department: 'Event Management',
+    members: [
+      { name: 'Nur Farhanah Binti Mohamad Said', role: 'Director' },
+      { name: 'Isaac Toh Zhen Yong', role: 'PnP Associate' },
+      { name: 'Syed Azhar Bin Syed Jakirul Alam', role: 'PnP Associate' },
+      { name: 'Lim Jie Shin', role: 'PnP Associate' },
+      { name: 'Joshua Law Tiew Lung', role: 'PnP Associate' },
+      { name: 'Husna Wajihah Binti Abu Talib', role: 'Event Operations Associate' },
+      { name: 'Nur Batrisyia Binti Mohd Sukri', role: 'Event Operations Associate' },
+      { name: 'Natasha Adilla Binti Hishsamsuri', role: 'Event Operations Associate' },
+    ],
+  },
+  {
+    department: 'Technical & Systems',
+    members: [
+      { name: 'Kisshore Nair A/L Sashitharan', role: 'Director' },
+      { name: 'Chin Shi Er', role: 'Technical Associate' },
+      { name: 'Shaif Ahmad Bin Tufail Ahmad', role: 'Technical Associate' },
+      { name: 'Sanchay A/L Ravindran', role: 'Technical Associate' },
+      { name: 'Madhaeys A/L Sathiamoorthy', role: 'Technical Associate' },
+      { name: 'Muhammad Rehan Ferdian', role: 'Technical Associate' },
+      { name: 'John Wong Sie Wei', role: 'Technical Associate' },
+      { name: 'Wan Muhammad Hazwan Bin Wan Rozli', role: 'Technical Associate' },
+    ],
   },
 ]
+
+// Flattened list used for cards + selection.
+const committee = committeeByDepartment.flatMap(({ department, members }) =>
+  members.map((member) => ({ ...member, department }))
+)
 
 function SectionHeading({
   eyebrow,
@@ -65,8 +140,6 @@ function CommitteeCard({
 }: {
   name: string
   role: string
-  department: string
-  quote: string
   onSelect: () => void
   isSelected?: boolean
 }) {
@@ -162,17 +235,24 @@ export default function AboutPage() {
           description="Our committee members support the club’s learning culture, events, and member experience across the academic year."
         />
         <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="grid gap-5 md:grid-cols-2">
-            {committee.map((member) => (
-              <CommitteeCard
-                key={member.name}
-                name={member.name}
-                role={member.role}
-                department={member.department}
-                quote={member.quote}
-                onSelect={() => setSelected(member)}
-                isSelected={selected.name === member.name}
-              />
+          <div className="space-y-10">
+            {committeeByDepartment.map(({ department, members }) => (
+              <div key={department}>
+                <p className="mb-4 text-xs font-black uppercase tracking-widest text-purple-600">
+                  {department}
+                </p>
+                <div className="grid gap-5 md:grid-cols-2">
+                  {members.map((member) => (
+                    <CommitteeCard
+                      key={member.name}
+                      name={member.name}
+                      role={member.role}
+                      onSelect={() => setSelected({ ...member, department })}
+                      isSelected={selected.name === member.name}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
 
@@ -195,23 +275,19 @@ export default function AboutPage() {
                 <p className="text-sm font-bold text-white/80">{selected.role}</p>
               </div>
             </div>
-            <p className="mt-6 text-base font-medium leading-relaxed text-white/90">
-              “{selected.quote}”
-            </p>
             <div className="mt-8 space-y-4 rounded-xl border-2 border-slate-900 bg-slate-900 p-4 text-sm text-white/80">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-white">
-                  Department
-                </p>
-                <p className="mt-1 font-semibold">{selected.department}</p>
-              </div>
               <div>
                 <p className="text-xs font-bold uppercase tracking-wide text-white">
                   Contact
                 </p>
-                <p className="mt-1 font-medium leading-relaxed">
-                  Contact details are shared through the club’s official channels and member community updates.
-                </p>
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:bg-white hover:text-slate-900"
+                >
+                  LinkedIn
+                </a>
               </div>
             </div>
           </aside>
