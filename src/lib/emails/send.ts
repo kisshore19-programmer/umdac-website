@@ -2,7 +2,7 @@
 import { Resend } from 'resend';
 import { welcomeEmail, applicationReceivedEmail } from './templates';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder_for_build');
 
 export async function sendWelcomeEmail(to: string, name: string) {
   return resend.emails.send({

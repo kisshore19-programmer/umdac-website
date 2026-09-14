@@ -1,62 +1,69 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { applicationSchema, type ApplicationInput } from '@/lib/schemas/application'
 import { sendApplicationReceivedEmail } from '@/lib/emails/send'
+import { revalidatePath } from 'next/cache'
 
 type ActionResponse = {
   success: boolean
   error?: string
+  isRegistered?: boolean
 }
 
-export async function applyToEventAction(input: ApplicationInput): Promise<ActionResponse> {
-  // Never trust client-side validation alone — re-check here even though
-  // the form already validated this with the same schema.
-  const parsed = applicationSchema.safeParse(input)
-  if (!parsed.success) {
-    return { success: false, error: 'Please check your answers and try again.' }
-  }
-
+// 1-Click RSVP Action for logged-in users (no extra forms needed)
+export async function registerForEventAction(eventId: number): Promise<ActionResponse> {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return { success: false, error: 'You must be logged in to apply.' }
+    return { success: false, error: 'You must be logged in to register for events.' }
   }
 
+  // Fetch event details
   const { data: event, error: eventError } = await supabase
     .from('events')
-    .select('title, capacity, status')
-    .eq('event_id', parsed.data.eventId)
+    .select('event_id, title, capacity, status, is_past')
+    .eq('event_id', eventId)
     .single()
 
-  if (eventError || !event) {
-    return { success: false, error: 'This event could not be found.' }
+  // Check if event is closed or past
+  if (event && (event.is_past || event.status === 'closed' || event.status === 'completed')) {
+    return { success: false, error: 'This event is no longer accepting registrations.' }
   }
 
-  if (event.status !== 'upcoming') {
-    return { success: false, error: 'This event is no longer accepting applications.' }
+  // Check if already registered
+  const { data: existingApp } = await supabase
+    .from('applications')
+    .select('application_id')
+    .eq('event_id', eventId)
+    .eq('user_id', user.id)
+    .single()
+
+  if (existingApp) {
+    return { success: true, isRegistered: true }
   }
 
-  if (event.capacity) {
+  // Check capacity if set
+  if (event?.capacity) {
     const { count } = await supabase
       .from('applications')
       .select('*', { count: 'exact', head: true })
-      .eq('event_id', parsed.data.eventId)
+      .eq('event_id', eventId)
 
     if (count !== null && count >= event.capacity) {
-      return { success: false, error: 'This event is full.' }
+      return { success: false, error: 'This event has reached full capacity.' }
     }
   }
 
+  // Insert registration record
   const { error: insertError } = await supabase
     .from('applications')
     .insert({
-      event_id: parsed.data.eventId,
+      event_id: eventId,
       user_id: user.id,
+      status: 'pending',
       answers: {
-        motivation: parsed.data.motivation,
-        availability: parsed.data.availability,
+        registered_via: '1-click registration',
       },
     })
 
@@ -64,15 +71,48 @@ export async function applyToEventAction(input: ApplicationInput): Promise<Actio
     return { success: false, error: insertError.message }
   }
 
-  const { error: emailError } = await sendApplicationReceivedEmail(
-    user.email!,
-    user.user_metadata?.full_name ?? 'there',
-    event.title ?? 'the event'
-  )
-
-  if (emailError) {
-    console.error('Application saved, but email failed to send:', emailError)
+  // Attempt sending confirmation email if configured
+  if (user.email) {
+    try {
+      await sendApplicationReceivedEmail(
+        user.email,
+        user.user_metadata?.full_name ?? user.user_metadata?.name ?? 'Member',
+        event?.title ?? 'the event'
+      )
+    } catch (err) {
+      console.warn('Confirmation email could not be delivered:', err)
+    }
   }
 
-  return { success: true }
+  revalidatePath('/events')
+  revalidatePath('/admin/events')
+  return { success: true, isRegistered: true }
+}
+
+// Check registration status of the current user
+export async function checkUserRegistrationAction(eventId: number): Promise<{ isRegistered: boolean; status?: string }> {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return { isRegistered: false }
+  }
+
+  const { data } = await supabase
+    .from('applications')
+    .select('status')
+    .eq('event_id', eventId)
+    .eq('user_id', user.id)
+    .single()
+
+  if (data) {
+    return { isRegistered: true, status: data.status }
+  }
+
+  return { isRegistered: false }
+}
+
+// Backward-compatibility wrapper for any legacy forms
+export async function applyToEventAction(input: { eventId: number; motivation?: string; availability?: string }) {
+  return await registerForEventAction(input.eventId)
 }

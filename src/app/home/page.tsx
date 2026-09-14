@@ -33,7 +33,7 @@ const featuredEvents = [
     location: 'TBA',
     status: 'Open' as const,
     description: 'Connect with industry professionals, explore career opportunities, and discover the latest in data technology.',
-    href: '/events/datafair',
+    href: '/events/data-fair',
   },
 ]
 

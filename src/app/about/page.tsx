@@ -2,7 +2,13 @@
 
 import { useState } from 'react'
 
-type Member = { name: string; role: string; image?: string; linkedin?: string }
+type Member = {
+  name: string
+  role: string
+  image?: string
+  imagePosition?: string
+  linkedin?: string
+}
 type DepartmentGroup = { department: string; members: Member[] }
 
 const committeeByDepartment: DepartmentGroup[] = [
@@ -13,12 +19,38 @@ const committeeByDepartment: DepartmentGroup[] = [
         name: 'Amer Hakim bin Ahmad Kamal Ariffin',
         role: 'President',
         image: '/members/amer_hakim.png',
+        imagePosition: 'center 15%',
       },
-      { name: 'Sanjeevan A/L Kumareson', role: 'Vice President' },
-      { name: 'Harshini A/P Kumara Vell', role: 'Secretary' },
-      { name: 'Narmathaa A/P Selvakumaran', role: 'Vice Secretary' },
-      { name: 'Tronan A/L Rejendran', role: 'Treasurer' },
-      { name: 'Nia Zahra binti Shamsul Muhardzi', role: 'Vice Treasurer' },
+      {
+        name: 'Sanjeevan A/L Kumareson',
+        role: 'Vice President',
+        image: '/members/sanjeevan.png',
+        imagePosition: 'center 15%',
+      },
+      {
+        name: 'Harshini A/P Kumara Vell',
+        role: 'Secretary',
+        image: '/members/harshini.jpg',
+        imagePosition: 'center 20%',
+      },
+      {
+        name: 'Narmathaa A/P Selvakumaran',
+        role: 'Vice Secretary',
+        image: '/members/narmatha.png',
+        imagePosition: 'center 15%',
+      },
+      {
+        name: 'Tronan A/L Rejendran',
+        role: 'Treasurer',
+        image: '/members/tronan.png',
+        imagePosition: 'center 15%',
+      },
+      {
+        name: 'Nia Zahra binti Shamsul Muhardzi',
+        role: 'Vice Treasurer',
+        image: '/members/nia_zahra.jpg',
+        imagePosition: 'center 15%',
+      },
     ],
   },
   {
@@ -140,12 +172,14 @@ function CommitteeCard({
   name,
   role,
   image,
+  imagePosition = 'center 20%',
   onSelect,
   isSelected = false,
 }: {
   name: string
   role: string
   image?: string
+  imagePosition?: string
   onSelect: () => void
   isSelected?: boolean
 }) {
@@ -171,7 +205,7 @@ function CommitteeCard({
               src={image}
               alt={name}
               className="h-full w-full object-cover"
-              style={{ objectPosition: 'center 18%' }}
+              style={{ objectPosition: imagePosition }}
             />
           ) : (
             name
@@ -263,6 +297,7 @@ export default function AboutPage() {
                       name={member.name}
                       role={member.role}
                       image={member.image}
+                      imagePosition={member.imagePosition}
                       onSelect={() => setSelected({ ...member, department })}
                       isSelected={selected.name === member.name}
                     />
@@ -272,15 +307,20 @@ export default function AboutPage() {
             ))}
           </div>
 
-          <aside className="h-fit overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:sticky lg:top-20">
-            <div className="relative h-44 sm:h-48 w-full overflow-hidden bg-slate-900">
+          {/* Sticky Member Detail Panel */}
+          <aside className="h-fit overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:sticky lg:top-24">
+            {/* Image Header with bottom fade */}
+            <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-900">
               {selected.image ? (
-                <img
-                  src={selected.image}
-                  alt={selected.name}
-                  className="h-full w-full object-cover"
-                  style={{ objectPosition: 'center 18%' }}
-                />
+                <>
+                  <img
+                    src={selected.image}
+                    alt={selected.name}
+                    className="h-full w-full object-cover object-top"
+                  />
+                  {/* Gentle bottom-only fade to card body */}
+                  <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent pointer-events-none" />
+                </>
               ) : (
                 <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-4 text-center">
                   <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_center,_#c084fc_1px,_transparent_1px)] [background-size:20px_20px]" />
@@ -293,26 +333,28 @@ export default function AboutPage() {
                   </div>
                 </div>
               )}
-              <span className="absolute top-3 left-3 rounded-lg border border-white/20 bg-slate-900/80 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur">
+              
+              <span className="absolute top-3 left-3 z-10 rounded-lg border border-white/20 bg-slate-900/80 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur">
                 {selected.department}
               </span>
             </div>
 
-            <div className="p-5 sm:p-6">
-              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+            {/* Member Details */}
+            <div className="p-5 sm:p-6 bg-slate-900/90 backdrop-blur-sm border-t border-white/10">
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-tight">
                 {selected.name}
               </h3>
-              <p className="mt-1 text-sm sm:text-base font-bold text-white/90">
+              <p className="mt-1 text-sm sm:text-base font-bold text-purple-300">
                 {selected.role}
               </p>
 
-              <div className="mt-4 sm:mt-5">
-                <p className="text-xs sm:text-sm font-bold text-white">Contact:</p>
+              <div className="mt-5 pt-4 border-t border-white/10">
+                <p className="text-xs font-bold uppercase tracking-wider text-slate-300">Contact:</p>
                 <a
                   href={selected.linkedin || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white bg-white/10 px-4 py-2.5 text-xs sm:text-sm font-black uppercase tracking-wider text-white backdrop-blur transition hover:bg-white hover:text-slate-900 active:translate-y-0.5"
+                  className="mt-2.5 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white bg-white/15 px-4 py-2.5 text-xs sm:text-sm font-black uppercase tracking-wider text-white backdrop-blur transition hover:bg-white hover:text-slate-900 active:translate-y-0.5 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]"
                 >
                   <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" />
