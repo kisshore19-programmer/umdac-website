@@ -2,14 +2,18 @@
 
 import { useState } from 'react'
 
-type Member = { name: string; role: string }
+type Member = { name: string; role: string; image?: string; linkedin?: string }
 type DepartmentGroup = { department: string; members: Member[] }
 
 const committeeByDepartment: DepartmentGroup[] = [
   {
     department: 'High Committee',
     members: [
-      { name: 'Amer Hakim bin Ahmad Kamal Ariffin', role: 'President' },
+      {
+        name: 'Amer Hakim bin Ahmad Kamal Ariffin',
+        role: 'President',
+        image: '/members/amer_hakim.png',
+      },
       { name: 'Sanjeevan A/L Kumareson', role: 'Vice President' },
       { name: 'Harshini A/P Kumara Vell', role: 'Secretary' },
       { name: 'Narmathaa A/P Selvakumaran', role: 'Vice Secretary' },
@@ -135,11 +139,13 @@ function SectionHeading({
 function CommitteeCard({
   name,
   role,
+  image,
   onSelect,
   isSelected = false,
 }: {
   name: string
   role: string
+  image?: string
   onSelect: () => void
   isSelected?: boolean
 }) {
@@ -156,15 +162,24 @@ function CommitteeCard({
     >
       <div className="flex items-center gap-4">
         <div
-          className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-slate-900 text-lg font-black uppercase ${
+          className={`relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-slate-900 text-lg font-black uppercase ${
             isSelected ? 'bg-slate-900 text-white' : 'bg-purple-100 text-slate-900'
           }`}
         >
-          {name
-            .split(' ')
-            .slice(0, 2)
-            .map((part) => part[0])
-            .join('')}
+          {image ? (
+            <img
+              src={image}
+              alt={name}
+              className="h-full w-full object-cover"
+              style={{ objectPosition: 'center 18%' }}
+            />
+          ) : (
+            name
+              .split(' ')
+              .slice(0, 2)
+              .map((part) => part[0])
+              .join('')
+          )}
         </div>
         <div>
           <p
@@ -234,11 +249,11 @@ export default function AboutPage() {
           title="Meet the committee"
           description="Our committee members support the club’s learning culture, events, and member experience across the academic year."
         />
-        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
           <div className="space-y-10">
             {committeeByDepartment.map(({ department, members }) => (
               <div key={department}>
-                <p className="mb-4 text-xs font-black uppercase tracking-widest text-purple-600">
+                <p className="mb-4 text-base sm:text-lg font-black uppercase tracking-wide text-purple-600">
                   {department}
                 </p>
                 <div className="grid gap-5 md:grid-cols-2">
@@ -247,6 +262,7 @@ export default function AboutPage() {
                       key={member.name}
                       name={member.name}
                       role={member.role}
+                      image={member.image}
                       onSelect={() => setSelected({ ...member, department })}
                       isSelected={selected.name === member.name}
                     />
@@ -256,36 +272,51 @@ export default function AboutPage() {
             ))}
           </div>
 
-          <aside className="rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 text-white shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
-            <p className="text-xs font-black uppercase tracking-widest text-white/80">
-              Selected member
-            </p>
-            <div className="mt-6 flex items-center gap-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-900 text-lg font-black text-white">
-                {selected.name
-                  .split(' ')
-                  .slice(0, 2)
-                  .map((part) => part[0])
-                  .join('')}
-              </div>
-              <div>
-                <h3 className="text-2xl font-black uppercase tracking-tight text-white">
-                  {selected.name}
-                </h3>
-                <p className="text-sm font-bold text-white/80">{selected.role}</p>
-              </div>
+          <aside className="h-fit overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:sticky lg:top-20">
+            <div className="relative h-44 sm:h-48 w-full overflow-hidden bg-slate-900">
+              {selected.image ? (
+                <img
+                  src={selected.image}
+                  alt={selected.name}
+                  className="h-full w-full object-cover"
+                  style={{ objectPosition: 'center 18%' }}
+                />
+              ) : (
+                <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-4 text-center">
+                  <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_center,_#c084fc_1px,_transparent_1px)] [background-size:20px_20px]" />
+                  <div className="relative flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-white/25 bg-white/10 text-2xl font-black uppercase text-white shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] backdrop-blur-md">
+                    {selected.name
+                      .split(' ')
+                      .slice(0, 2)
+                      .map((part) => part[0])
+                      .join('')}
+                  </div>
+                </div>
+              )}
+              <span className="absolute top-3 left-3 rounded-lg border border-white/20 bg-slate-900/80 px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur">
+                {selected.department}
+              </span>
             </div>
-            <div className="mt-8 space-y-4 rounded-xl border-2 border-slate-900 bg-slate-900 p-4 text-sm text-white/80">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-wide text-white">
-                  Contact
-                </p>
+
+            <div className="p-5 sm:p-6">
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
+                {selected.name}
+              </h3>
+              <p className="mt-1 text-sm sm:text-base font-bold text-white/90">
+                {selected.role}
+              </p>
+
+              <div className="mt-4 sm:mt-5">
+                <p className="text-xs sm:text-sm font-bold text-white">Contact:</p>
                 <a
-                  href="#"
+                  href={selected.linkedin || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center justify-center gap-2 rounded-lg border-2 border-white bg-white/10 px-4 py-2 text-xs font-black uppercase tracking-wide text-white transition hover:bg-white hover:text-slate-900"
+                  className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white bg-white/10 px-4 py-2.5 text-xs sm:text-sm font-black uppercase tracking-wider text-white backdrop-blur transition hover:bg-white hover:text-slate-900 active:translate-y-0.5"
                 >
+                  <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" />
+                  </svg>
                   LinkedIn
                 </a>
               </div>
