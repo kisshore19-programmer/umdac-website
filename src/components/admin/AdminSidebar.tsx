@@ -42,6 +42,18 @@ export default function AdminSidebar() {
           )
         })}
       </nav>
+
+      <div className="mt-auto pt-8">
+        <div className="flex items-center gap-3 rounded-lg bg-slate-800 p-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white">
+            MA
+          </div>
+          <div className="overflow-hidden">
+            <p className="truncate text-sm font-semibold text-white">Maddy Admin</p>
+            <p className="truncate text-xs text-slate-400">Committee</p>
+          </div>
+        </div>
+      </div>
     </aside>
   )
 }
