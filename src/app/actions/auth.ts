@@ -143,6 +143,46 @@ export async function loginAction(formData: FormData) {
 }
 
 /**
+ * Handles admin login authentication via Supabase.
+ *
+ * Verifies credentials and checks if the authenticated user has an 'admin' role.
+ * If not an admin, immediately signs them out and throws an unauthorized error.
+ *
+ * @param {FormData} formData - The submitted form data containing email and password.
+ * @returns {Promise<never>} Automatically redirects to '/admin' on success.
+ * @throws {Error} If credentials fail or user is not an administrator.
+ */
+export async function adminLoginAction(formData: FormData) {
+  const supabase = await createClient()
+
+  const email = await validate.sanitizeAndValidateEmail(formData.get('email'))
+  const password = formData.get('password') as string
+  validate.validatePassword(password)
+
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  })
+
+  if (error) {
+    if (error.message.includes('Invalid login credentials')) {
+      throw new Error('Invalid email or password.')
+    }
+    throw new Error(error.message)
+  }
+
+  if (data.user) {
+    const isAdmin = await isUserAdmin(data.user.id)
+    if (!isAdmin) {
+      await supabase.auth.signOut()
+      throw new Error('Access denied. Administrator privileges required.')
+    }
+  }
+
+  redirect('/admin')
+}
+
+/**
  * Signs out the currently authenticated user by revoking their session cookies.
  *
  * @returns {Promise<never>} Redirects to the login page after signing out.

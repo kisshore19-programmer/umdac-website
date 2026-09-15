@@ -1,94 +1,68 @@
-// src/components/admin/ApplicantTable.tsx
 'use client'
+import { useState, useMemo } from 'react'
 
-import type { ApplicantRecord } from '@/lib/supabase/queries/applicants'
-
-interface Props {
-  initialApplicants: ApplicantRecord[]
+type Applicant = {
+  application_id: number
+  status: string | null
+  answers: { motivation?: string; availability?: string } | null
+  created_at: string
+  profiles: { name: string; email: string } | null
 }
 
-export default function ApplicantTable({ initialApplicants }: Props) {
-  const getBadgeColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'accepted':
-        return 'bg-emerald-100 text-emerald-800'
-      case 'rejected':
-        return 'bg-rose-100 text-rose-800'
-      case 'under review':
-        return 'bg-blue-100 text-blue-800'
-      default:
-        return 'bg-amber-100 text-amber-800'
-    }
+export function ApplicantTable({ applicants }: { applicants: Applicant[] }) {
+  const [query, setQuery] = useState('')
+
+  const filtered = useMemo(() =>
+    applicants.filter(a =>
+      a.profiles?.name.toLowerCase().includes(query.toLowerCase()) ||
+      a.profiles?.email.toLowerCase().includes(query.toLowerCase())
+    ), [applicants, query])
+
+  function exportToCsv() {
+    const headers = ['Name', 'Email', 'Status', 'Availability', 'Motivation']
+    const rows = filtered.map(a => [
+      a.profiles?.name ?? '',
+      a.profiles?.email ?? '',
+      a.status ?? '',
+      a.answers?.availability ?? '',
+      a.answers?.motivation ?? '',
+    ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
+    const csv = [headers.join(','), ...rows].join('\n')
+
+    const blob = new Blob([csv], { type: 'text/csv' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'applicants.csv'
+    link.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
-    <div className="space-y-4">
-      {/* Search & Action Bar Placeholder */}
-      <div className="flex flex-col sm:flex-row gap-3 justify-between items-center bg-white p-4 rounded-lg border border-slate-200">
-        <div className="text-sm text-slate-500">
-          Showing <span className="font-semibold text-slate-800">{initialApplicants.length}</span> applicants
-        </div>
-        <div className="text-xs text-slate-400 italic">
-          [Filters & CSV Export to be wired here]
-        </div>
-      </div>
+    <div>
+      <input placeholder="Search applicants..." value={query} onChange={e => setQuery(e.target.value)} />
+      <button onClick={exportToCsv}>Export CSV</button>
 
-      {/* Table Structure */}
-      <div className="overflow-x-auto border border-slate-200 rounded-lg bg-white shadow-sm">
-        <table className="min-w-full divide-y divide-slate-200 text-sm text-left">
-          <thead className="bg-slate-50 text-slate-600 font-semibold">
-            <tr>
-              <th className="px-4 py-3">ID</th>
-              <th className="px-4 py-3">Applicant Name</th>
-              <th className="px-4 py-3">Email</th>
-              <th className="px-4 py-3">Faculty / Major</th>
-              <th className="px-4 py-3">Year</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Applied At</th>
+      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+        <thead>
+          <tr>
+            <th style={{ textAlign: 'left', padding: '0.5rem' }}>Name</th>
+            <th style={{ textAlign: 'left', padding: '0.5rem' }}>Email</th>
+            <th style={{ textAlign: 'left', padding: '0.5rem' }}>Status</th>
+            <th style={{ textAlign: 'left', padding: '0.5rem' }}>Availability</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filtered.map(a => (
+            <tr key={a.application_id}>
+              <td style={{ padding: '0.5rem' }}>{a.profiles?.name}</td>
+              <td style={{ padding: '0.5rem' }}>{a.profiles?.email}</td>
+              <td style={{ padding: '0.5rem' }}>{a.status ?? 'pending'}</td>
+              <td style={{ padding: '0.5rem' }}>{a.answers?.availability}</td>
             </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100 text-slate-700">
-            {initialApplicants.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-slate-400">
-                  No applicants found.
-                </td>
-              </tr>
-            ) : (
-              initialApplicants.map((app) => (
-                <tr key={app.application_id} className="hover:bg-slate-50/80 transition-colors">
-                  <td className="px-4 py-3 font-mono text-xs text-slate-500">
-                    #{app.application_id}
-                  </td>
-                  <td className="px-4 py-3 font-medium text-slate-900">
-                    {app.profiles?.name ?? 'Unknown'}
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">
-                    {app.profiles?.email ?? '-'}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="font-medium text-slate-800">{app.profiles?.faculty ?? '-'}</span>
-                    {app.profiles?.major && (
-                      <span className="text-xs text-slate-500 block">({app.profiles.major})</span>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 text-slate-600">
-                    {app.profiles?.year_of_study ? `Year ${app.profiles.year_of_study}` : '-'}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${getBadgeColor(app.status)}`}>
-                      {app.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-slate-500 text-xs">
-                    {new Date(app.created_at).toLocaleDateString()}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { SiteHeader } from '@/components/site-header'
+import { createClient } from '@/lib/supabase/server'
 import './globals.css'
 
 const inter = Inter({
@@ -23,12 +24,46 @@ const navItems = [
   { href: '/merch', label: 'Merch' },
 ]
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
+  let initialUserName: string | null = null
+  let isAdmin = false
+
+  if (user) {
+    const metaName =
+      user.user_metadata?.full_name || user.user_metadata?.name
+    if (metaName) {
+      initialUserName = metaName
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('name, role')
+      .eq('user_id', user.id)
+      .single()
+
+    if (!initialUserName && profile?.name) {
+      initialUserName = profile.name
+    }
+    if (!initialUserName) {
+      initialUserName = user.email?.split('@')[0] || 'Member'
+    }
+    isAdmin = profile?.role === 'admin'
+  }
+
   return (
     <html lang="en" className={`${inter.variable} h-full bg-slate-50 text-slate-900`}>
       <body className="min-h-full bg-slate-50 text-slate-900 antialiased font-sans">
         <div className="min-h-screen">
-          <SiteHeader />
+          <SiteHeader
+            initialUser={user ? { id: user.id, email: user.email } : null}
+            initialUserName={initialUserName}
+            isAdmin={isAdmin}
+          />
           {children}
 
           <footer className="border-t border-slate-200 bg-white">
