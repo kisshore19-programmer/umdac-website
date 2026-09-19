@@ -20,26 +20,26 @@ export async function registerForEventAction(eventId: number): Promise<ActionRes
   }
 
   // Fetch event details
-  const { data: event, error: eventError } = await supabase
+  const { data: event } = await supabase
     .from('events')
     .select('event_id, title, capacity, status, is_past')
     .eq('event_id', eventId)
-    .single()
+    .maybeSingle()
 
   // Check if event is closed or past
   if (event && (event.is_past || event.status === 'closed' || event.status === 'completed')) {
     return { success: false, error: 'This event is no longer accepting registrations.' }
   }
 
-  // Check if already registered
-  const { data: existingApp } = await supabase
+  // Check if already registered to prevent duplicates
+  const { data: existingApps } = await supabase
     .from('applications')
     .select('application_id')
     .eq('event_id', eventId)
     .eq('user_id', user.id)
-    .single()
+    .limit(1)
 
-  if (existingApp) {
+  if (existingApps && existingApps.length > 0) {
     return { success: true, isRegistered: true }
   }
 
@@ -55,19 +55,23 @@ export async function registerForEventAction(eventId: number): Promise<ActionRes
     }
   }
 
-  // Insert registration record
+  // Insert registration record with immediate 'registered' status
   const { error: insertError } = await supabase
     .from('applications')
     .insert({
       event_id: eventId,
       user_id: user.id,
-      status: 'pending',
+      status: 'registered',
       answers: {
         registered_via: '1-click registration',
       },
     })
 
   if (insertError) {
+    // If duplicate insert error code
+    if (insertError.code === '23505') {
+      return { success: true, isRegistered: true }
+    }
     return { success: false, error: insertError.message }
   }
 
@@ -85,7 +89,9 @@ export async function registerForEventAction(eventId: number): Promise<ActionRes
   }
 
   revalidatePath('/events')
+  revalidatePath(`/events/${eventId}`)
   revalidatePath('/admin/events')
+  revalidatePath('/home')
   return { success: true, isRegistered: true }
 }
 
@@ -103,10 +109,10 @@ export async function checkUserRegistrationAction(eventId: number): Promise<{ is
     .select('status')
     .eq('event_id', eventId)
     .eq('user_id', user.id)
-    .single()
+    .limit(1)
 
-  if (data) {
-    return { isRegistered: true, status: data.status }
+  if (data && data.length > 0) {
+    return { isRegistered: true, status: data[0].status || 'registered' }
   }
 
   return { isRegistered: false }

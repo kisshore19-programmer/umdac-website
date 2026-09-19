@@ -18,6 +18,8 @@ export interface EventRecord {
   is_past: boolean
   writeup: string | null
   image_urls: string[]
+  registration_link?: string | null
+  registration_type?: string | null
 }
 
 /**

@@ -8,6 +8,7 @@ import {
   type MerchRecord
 } from '@/lib/supabase/queries/merch'
 import { type EventRecord } from '@/lib/supabase/queries/events'
+import { parseEventNotice } from '@/lib/utils'
 
 export type CreateMerchInput = Omit<MerchRecord, 'merch_id' | 'created_at' | 'updated_at'>
 export type UpdateMerchInput = Partial<CreateMerchInput>
@@ -125,6 +126,8 @@ export type CreateEventInput = {
   is_past?: boolean
   writeup?: string | null
   image_urls?: string[]
+  registration_link?: string | null
+  registration_type?: string | null
 }
 
 export type UpdateEventInput = Partial<CreateEventInput>
@@ -306,39 +309,35 @@ export async function fetchAdminEventsAction(): Promise<AdminEventRecord[]> {
     .select('*')
     .order('date', { ascending: false })
 
-  // Count registrations per event
+  // Count distinct user registrations per event
   const { data: appCounts } = await supabase
     .from('applications')
-    .select('event_id')
+    .select('event_id, user_id')
 
   const countMap: Record<number, number> = {}
+  const seenUsersPerEvent = new Set<string>()
   appCounts?.forEach((app) => {
-    countMap[app.event_id] = (countMap[app.event_id] || 0) + 1
+    const key = `${app.event_id}_${app.user_id}`
+    if (!seenUsersPerEvent.has(key)) {
+      seenUsersPerEvent.add(key)
+      countMap[app.event_id] = (countMap[app.event_id] || 0) + 1
+    }
   })
 
-  const dbEvents: AdminEventRecord[] = (events || []).map((e) => ({
-    ...e,
-    checklist: Array.isArray(e.checklist) ? e.checklist : [],
-    image_urls: Array.isArray(e.image_urls) ? e.image_urls : [],
-    is_past: Boolean(e.is_past),
-    registrations_count: countMap[e.event_id] || 0,
-  }))
-
-  // Merge default fallback events if their slug is not already present in dbEvents
-  const existingSlugs = new Set(dbEvents.map((e) => (e.slug || '').toLowerCase()))
-  const existingIds = new Set(dbEvents.map((e) => e.event_id))
-
-  const merged = [...dbEvents]
-  for (const fallback of DEFAULT_FALLBACK_EVENTS) {
-    if (!existingSlugs.has((fallback.slug || '').toLowerCase()) && !existingIds.has(fallback.event_id)) {
-      merged.push({
-        ...fallback,
-        registrations_count: countMap[fallback.event_id] || 0,
-      })
+  const dbEvents: AdminEventRecord[] = (events || []).map((e) => {
+    const { noticeText, registrationLink } = parseEventNotice(e.notice)
+    return {
+      ...e,
+      notice: noticeText,
+      registration_link: e.registration_link || registrationLink,
+      checklist: Array.isArray(e.checklist) ? e.checklist : [],
+      image_urls: Array.isArray(e.image_urls) ? e.image_urls : [],
+      is_past: Boolean(e.is_past),
+      registrations_count: countMap[e.event_id] || 0,
     }
-  }
+  })
 
-  return merged
+  return dbEvents
 }
 
 // READ: Fetch all registered members for a specific event
@@ -356,7 +355,18 @@ export async function fetchEventApplicantsAction(eventId: number): Promise<Appli
     return []
   }
 
-  return (data as any) ?? []
+  // Deduplicate by user_id to prevent any duplicate listings in dashboard
+  const seen = new Set<string>()
+  const uniqueApplicants: ApplicantRecord[] = []
+  for (const app of (data as any) || []) {
+    const uid = app.user_id || `app_${app.application_id}`
+    if (!seen.has(uid)) {
+      seen.add(uid)
+      uniqueApplicants.push(app)
+    }
+  }
+
+  return uniqueApplicants
 }
 
 // CREATE EVENT
@@ -410,6 +420,7 @@ export async function createEventAction(payload: CreateEventInput) {
     return { success: false, error: error.message }
   }
 
+  revalidatePath('/', 'layout')
   revalidatePath('/admin/events')
   revalidatePath('/events')
   revalidatePath('/home')
@@ -468,6 +479,7 @@ export async function updateEventAction(eventId: number, updates: UpdateEventInp
     }
   }
 
+  revalidatePath('/', 'layout')
   revalidatePath('/admin/events')
   revalidatePath('/events')
   revalidatePath('/home')
@@ -475,22 +487,25 @@ export async function updateEventAction(eventId: number, updates: UpdateEventInp
 }
 
 // DELETE EVENT
-export async function deleteEventAction(eventId: number) {
+export async function deleteEventAction(eventId: number, slug?: string) {
   const supabase = await createClient()
 
   // Clean up applications for this event if any
   await supabase.from('applications').delete().eq('event_id', eventId)
 
-  const { error } = await supabase
-    .from('events')
-    .delete()
-    .eq('event_id', eventId)
+  let deleteQuery = supabase.from('events').delete().eq('event_id', eventId)
+  if (slug) {
+    deleteQuery = supabase.from('events').delete().or(`event_id.eq.${eventId},slug.eq.${slug}`)
+  }
+
+  const { error } = await deleteQuery
 
   if (error) {
     console.error('Delete event error:', error.message)
     return { success: false, error: error.message }
   }
 
+  revalidatePath('/', 'layout')
   revalidatePath('/admin/events')
   revalidatePath('/events')
   revalidatePath('/home')

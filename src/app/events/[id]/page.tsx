@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getEventBySlug, EventRecord } from '@/lib/supabase/queries/events'
 import { EventRegisterButton } from '@/components/events/EventRegisterButton'
+import { parseEventDateTime, parseEventNotice } from '@/lib/utils'
 
 const fallbackEvents: Record<string, {
   event_id: number
@@ -140,15 +141,20 @@ const fallbackEvents: Record<string, {
   },
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 async function resolveEvent(supabase: any, id: string): Promise<EventRecord | null> {
+  const decodedId = decodeURIComponent(id).trim()
+
   // 1. Try slug
-  let event = await getEventBySlug(supabase, id)
+  let event = await getEventBySlug(supabase, decodedId)
   
   // 2. Try numeric ID
   if (!event) {
-    const numId = Number(id)
+    const numId = Number(decodedId)
     if (!isNaN(numId) && numId > 0) {
-      const { data } = await supabase.from('events').select('*').eq('event_id', numId).single()
+      const { data } = await supabase.from('events').select('*').eq('event_id', numId).maybeSingle()
       if (data) {
         event = {
           ...data,
@@ -160,16 +166,34 @@ async function resolveEvent(supabase: any, id: string): Promise<EventRecord | nu
     }
   }
 
-  // 3. Fallbacks
-  if (!event && id === 'datafair') {
+  // 3. Try case-insensitive slug search in DB
+  if (!event) {
+    const { data } = await supabase
+      .from('events')
+      .select('*')
+      .ilike('slug', decodedId)
+      .limit(1)
+    if (data && data.length > 0) {
+      const row = data[0]
+      event = {
+        ...row,
+        checklist: Array.isArray(row.checklist) ? row.checklist : [],
+        image_urls: Array.isArray(row.image_urls) ? row.image_urls : [],
+        is_past: Boolean(row.is_past),
+      }
+    }
+  }
+
+  // 4. Fallbacks
+  if (!event && decodedId === 'datafair') {
     event = await getEventBySlug(supabase, 'data-fair')
   }
-  if (!event && id === 'data-fair') {
+  if (!event && decodedId === 'data-fair') {
     event = await getEventBySlug(supabase, 'datafair')
   }
   if (!event) {
     const fallback = Object.values(fallbackEvents).find(
-      (e) => e.slug === id || String(e.event_id) === id
+      (e) => e.slug === decodedId || String(e.event_id) === decodedId
     )
     if (fallback) {
       event = fallback
@@ -203,7 +227,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
   // Get current user registration status
   const { data: { user } } = await supabase.auth.getUser()
   let isRegistered = false
-  let regStatus = 'pending'
+  let regStatus = 'registered'
 
   if (user) {
     const { data: appData } = await supabase
@@ -211,44 +235,48 @@ export default async function EventDetailPage({ params }: EventPageProps) {
       .select('status')
       .eq('event_id', event.event_id)
       .eq('user_id', user.id)
-      .single()
+      .limit(1)
 
-    if (appData) {
+    if (appData && appData.length > 0) {
       isRegistered = true
-      regStatus = appData.status
+      regStatus = appData[0].status || 'registered'
     }
   }
 
   // Resolve display values
-  const displayDate = event.date && event.date !== 'TBA'
-    ? new Date(event.date).toLocaleDateString('en-MY', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    : 'TBA'
-  const displayTime     = event.time_label   || '10:00 AM - 1:00 PM MYT'
+  const { displayDate, displayTime } = parseEventDateTime(event.date, event.time_label)
+  const { noticeText, registrationLink } = parseEventNotice(event.notice)
   const displayLocation = event.location     || 'Faculty of Computer Science and Information Technology, UM'
   const displayType     = event.type         || 'General'
   const displayStatus   = event.status       || 'TBA'
-  const displayNotice   = event.notice       || 'Registration details will be announced soon.'
+  const displayNotice   = noticeText         || 'Registration details will be announced soon.'
+  const effectiveRegLink = event.registration_link || registrationLink
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
       {/* Hero banner */}
-      <div className="overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
-        <div className="h-56 p-6 text-white md:p-10">
-          <div className="flex h-full items-end justify-between gap-4">
+      <div className="relative overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
+        {event.image_urls && event.image_urls.length > 0 && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={event.image_urls[0]}
+            alt={event.title}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/60 to-slate-900/40" />
+        <div className="relative z-10 flex min-h-[220px] flex-col justify-end p-6 text-white md:p-10">
+          <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="inline-flex items-center rounded bg-white/15 px-2.5 py-1 text-xs font-extrabold uppercase tracking-widest text-white">
+              <span className="inline-flex items-center rounded border border-white/20 bg-black/50 backdrop-blur-sm px-2.5 py-1 text-xs font-extrabold uppercase tracking-widest text-white">
                 {displayType}
               </span>
-              <h1 className="mt-3 text-3xl font-black uppercase tracking-tight text-white md:text-5xl">
+              <h1 className="mt-3 text-3xl font-black uppercase tracking-tight text-white md:text-5xl drop-shadow-md">
                 {event.title}
               </h1>
             </div>
-            <span className="shrink-0 rounded border-2 border-white/30 bg-white/15 px-3 py-1.5 text-sm font-extrabold uppercase tracking-wider text-white">
+            <span className="shrink-0 rounded border-2 border-white/30 bg-black/40 backdrop-blur-sm px-3 py-1.5 text-sm font-extrabold uppercase tracking-wider text-white">
               {displayStatus}
             </span>
           </div>
@@ -277,27 +305,34 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                 <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
                   Gallery
                 </h2>
-                <div className="mt-4 grid grid-cols-2 gap-4">
+                <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {event.image_urls && event.image_urls.length > 0 ? (
                     event.image_urls.map((url, i) => (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
+                      <a
                         key={i}
-                        src={url}
-                        alt={`${event.title} photo ${i + 1}`}
-                        className="aspect-video w-full rounded-xl border-2 border-slate-900 object-cover shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]"
-                      />
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative aspect-video overflow-hidden rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={url}
+                          alt={`${event.title} photo ${i + 1}`}
+                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                      </a>
                     ))
                   ) : (
                     <>
                       <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
                         <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                          [Image 1]
+                          Photos Coming Soon
                         </span>
                       </div>
                       <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
                         <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
-                          [Image 2]
+                          Photos Coming Soon
                         </span>
                       </div>
                     </>
@@ -306,7 +341,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
               </div>
             </div>
           ) : (
-            <div>
+            <div className="space-y-8">
               {/* Notice banner */}
               <div className="rounded-xl border-2 border-slate-900 bg-indigo-50 p-4 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
                 <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">
@@ -315,11 +350,18 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                 <p className="mt-2 text-sm leading-relaxed text-slate-700">{displayNotice}</p>
               </div>
 
-              <p className="mt-6 text-base leading-8 text-slate-600">{event.description}</p>
+              {event.description && (
+                <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
+                    About this event
+                  </h2>
+                  <p className="mt-4 text-base leading-8 text-slate-600 whitespace-pre-line">{event.description}</p>
+                </div>
+              )}
 
               {/* What to expect checklist */}
               {event.checklist.length > 0 && (
-                <div className="mt-8">
+                <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
                   <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
                     What to expect
                   </h2>
@@ -336,15 +378,50 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                 </div>
               )}
 
-              {/* 1-Click Registration section */}
-              <div className="mt-10">
+              {/* Event Gallery / Photos */}
+              {event.image_urls && event.image_urls.length > 0 && (
+                <div>
+                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
+                    Gallery & Highlights
+                  </h2>
+                  <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    {event.image_urls.map((url, i) => (
+                      <a
+                        key={i}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative aspect-video overflow-hidden rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={url}
+                          alt={`${event.title} photo ${i + 1}`}
+                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Registration section (1-Click or External Form) */}
+              <div className="pt-2">
                 <EventRegisterButton
                   eventId={event.event_id}
                   eventTitle={event.title}
                   isLoggedIn={Boolean(user)}
                   initialIsRegistered={isRegistered}
                   initialStatus={regStatus}
-                  isClosed={event.status === 'closed' || event.status === 'completed'}
+                  isClosed={
+                    event.status === 'closed' ||
+                    event.status === 'completed' ||
+                    event.status === 'cancelled' ||
+                    event.status === 'upcoming'
+                  }
+                  eventStatus={event.status}
+                  externalUrl={effectiveRegLink}
+                  ctaLabel={event.cta_label}
                 />
               </div>
             </div>

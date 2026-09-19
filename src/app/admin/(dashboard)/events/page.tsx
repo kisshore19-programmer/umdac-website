@@ -12,6 +12,7 @@ import {
 } from '@/app/actions/adminActions'
 import { EventModal } from '@/components/admin/events/EventModal'
 import { EventRegistrationsView } from '@/components/admin/events/EventRegistrationsView'
+import { parseEventDateTime } from '@/lib/utils'
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<AdminEventRecord[]>([])
@@ -67,7 +68,8 @@ export default function AdminEventsPage() {
   }
 
   const handleDeleteEvent = async (eventId: number) => {
-    const res = await deleteEventAction(eventId)
+    const target = events.find((e) => e.event_id === eventId)
+    const res = await deleteEventAction(eventId, target?.slug || undefined)
     if (!res.success) throw new Error(res.error || 'Failed to delete event')
     await loadEvents()
   }
@@ -206,11 +208,17 @@ export default function AdminEventsPage() {
 
                     <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-200/60 text-xs font-semibold text-slate-500">
                       <span>
-                        📅 {event.date ? new Date(event.date).toLocaleDateString() : 'TBA'}
+                        📅 {parseEventDateTime(event.date, event.time_label).displayDate}
                       </span>
-                      <span className="font-black text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-md border border-purple-200">
-                        👥 {event.registrations_count} Registrations
-                      </span>
+                      {event.registration_link ? (
+                        <span className="font-black text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200">
+                          🔗 External Link
+                        </span>
+                      ) : (
+                        <span className="font-black text-purple-700 bg-purple-100/70 px-2 py-0.5 rounded-md border border-purple-200">
+                          👥 {event.registrations_count} Registrations
+                        </span>
+                      )}
                     </div>
                   </div>
                 )

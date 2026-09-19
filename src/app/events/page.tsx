@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { EventCard, EventStatus } from '@/components/umdac-ui'
 import { fetchAdminEventsAction, AdminEventRecord } from '@/app/actions/adminActions'
+import { parseEventDateTime } from '@/lib/utils'
 
 const fallbackUpcoming = [
   {
@@ -10,7 +11,7 @@ const fallbackUpcoming = [
     date: 'TBA',
     type: 'Bootcamp',
     location: 'TBA',
-    status: 'Open' as EventStatus,
+    status: 'TBA' as EventStatus,
     description: 'Learn how to build and scale your ideas in our intensive startup bootcamp designed for student founders.',
     href: '/events/startup-bootcamp',
   },
@@ -19,7 +20,7 @@ const fallbackUpcoming = [
     date: 'TBA',
     type: 'Competition',
     location: 'TBA',
-    status: 'Open' as EventStatus,
+    status: 'TBA' as EventStatus,
     description: 'A challenge to solve real-world problems using data analytics, machine learning, and storytelling.',
     href: '/events/datathon',
   },
@@ -28,7 +29,7 @@ const fallbackUpcoming = [
     date: 'TBA',
     type: 'Fair',
     location: 'TBA',
-    status: 'Open' as EventStatus,
+    status: 'TBA' as EventStatus,
     description: 'Connect with industry professionals, explore career opportunities, and discover the latest in data technology.',
     href: '/events/data-fair',
   },
@@ -77,34 +78,68 @@ export default function EventsPage() {
   // Map DB events to EventCard props
   const mappedUpcoming = dbEvents
     .filter((e) => !e.is_past)
-    .map((e) => ({
-      title: e.title,
-      date: e.date && e.date !== 'TBA' && !e.date.includes('2026-12-31')
-        ? new Date(e.date).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })
-        : 'TBA',
-      type: e.type || 'Event',
-      location: e.location || 'TBA',
-      status: (e.status === 'active' || e.status === 'upcoming' ? 'Open' : e.status === 'closed' ? 'Closed' : 'Open') as EventStatus,
-      description: e.description || '',
-      href: `/events/${e.slug || e.event_id}`,
-    }))
+    .map((e) => {
+      const { displayDate } = parseEventDateTime(e.date, e.time_label)
+      const isTba = displayDate.toUpperCase() === 'TBA' || e.status === 'upcoming' || e.status === 'tba'
+      let badgeStatus: EventStatus = 'Open'
+      if (isTba) {
+        badgeStatus = 'TBA'
+      } else if (e.status === 'closed' || e.status === 'completed' || e.status === 'cancelled') {
+        badgeStatus = 'Closed'
+      } else if (e.status === 'active' || e.status === 'open') {
+        badgeStatus = 'Open'
+      }
+
+      return {
+        title: e.title,
+        date: displayDate,
+        rawDate: e.date,
+        type: e.type || 'Event',
+        location: e.location || 'TBA',
+        status: badgeStatus,
+        description: e.description || '',
+        href: `/events/${e.slug || e.event_id}`,
+        imageUrl: e.image_urls?.[0],
+      }
+    })
+    .sort((a, b) => {
+      // 1. OPEN events appear ahead of TBA
+      const getPriority = (status: EventStatus) => {
+        if (status === 'Open' || status === 'Closing Soon') return 0
+        if (status === 'Closed') return 1
+        return 2 // TBA / Upcoming
+      }
+      const priorityDiff = getPriority(a.status) - getPriority(b.status)
+      if (priorityDiff !== 0) return priorityDiff
+
+      // 2. If both are open, sort by date ascending (closest date first)
+      if (a.rawDate && b.rawDate && a.status === 'Open' && b.status === 'Open') {
+        const timeA = new Date(a.rawDate).getTime()
+        const timeB = new Date(b.rawDate).getTime()
+        if (!isNaN(timeA) && !isNaN(timeB)) return timeA - timeB
+      }
+
+      return 0
+    })
 
   const mappedPast = dbEvents
     .filter((e) => e.is_past)
-    .map((e) => ({
-      title: e.title,
-      date: e.date && e.date !== 'TBA'
-        ? new Date(e.date).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })
-        : 'Past Event',
-      type: e.type || 'Event',
-      location: e.location || 'TBA',
-      status: 'Past Event' as EventStatus,
-      description: e.description || e.writeup || '',
-      href: `/events/${e.slug || e.event_id}`,
-    }))
+    .map((e) => {
+      const { displayDate } = parseEventDateTime(e.date, e.time_label)
+      return {
+        title: e.title,
+        date: displayDate,
+        type: e.type || 'Event',
+        location: e.location || 'TBA',
+        status: 'Past Event' as EventStatus,
+        description: e.description || e.writeup || '',
+        href: `/events/${e.slug || e.event_id}`,
+        imageUrl: e.image_urls?.[0],
+      }
+    })
 
-  const upcomingList = mappedUpcoming.length > 0 ? mappedUpcoming : fallbackUpcoming
-  const pastList = mappedPast.length > 0 ? mappedPast : fallbackPast
+  const upcomingList = isLoading ? fallbackUpcoming : mappedUpcoming
+  const pastList = isLoading ? fallbackPast : mappedPast
   const eventsToShow = view === 'upcoming' ? upcomingList : pastList
 
   return (
@@ -129,10 +164,10 @@ export default function EventsPage() {
         <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="mb-2 text-xs font-black uppercase tracking-widest text-purple-600">
-              {view === 'upcoming' ? 'UPCOMING EVENTS' : 'PAST EVENTS'}
+              {view === 'upcoming' ? 'SCHEDULE & CALENDAR' : 'COMMUNITY HIGHLIGHTS'}
             </p>
             <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 md:text-5xl">
-              {view === 'upcoming' ? 'Open for registration' : 'Community highlights'}
+              {view === 'upcoming' ? 'UPCOMING EVENTS' : 'PAST EVENTS'}
             </h2>
           </div>
 
@@ -145,7 +180,7 @@ export default function EventsPage() {
                 type="button"
                 aria-pressed={view === option}
                 onClick={() => setView(option)}
-                className={`px-5 py-2.5 text-sm font-extrabold uppercase tracking-wider transition ${
+                className={`px-5 py-2.5 text-sm font-extrabold uppercase tracking-wider transition cursor-pointer ${
                   view === option
                     ? 'bg-slate-900 text-white'
                     : 'bg-white text-slate-600 hover:bg-slate-50'
@@ -158,16 +193,22 @@ export default function EventsPage() {
         </div>
 
         {/* Events grid */}
-        <div className={view === 'upcoming' ? 'grid gap-6 lg:grid-cols-3' : 'grid gap-6 lg:grid-cols-2'}>
-          {eventsToShow.map((event) => (
-            <div
-              key={event.title}
-              className={view === 'past' ? 'opacity-90 hover:opacity-100 transition-opacity duration-200' : ''}
-            >
-              <EventCard {...event} />
-            </div>
-          ))}
-        </div>
+        {!isLoading && eventsToShow.length === 0 ? (
+          <div className="rounded-2xl border-2 border-slate-900 bg-white p-12 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+            <p className="text-base font-bold text-slate-500">No {view} events currently available.</p>
+          </div>
+        ) : (
+          <div className={view === 'upcoming' ? 'grid gap-6 lg:grid-cols-3 items-stretch' : 'grid gap-6 lg:grid-cols-2 items-stretch'}>
+            {eventsToShow.map((event) => (
+              <div
+                key={event.title}
+                className={`h-full flex flex-col ${view === 'past' ? 'opacity-90 hover:opacity-100 transition-opacity duration-200' : ''}`}
+              >
+                <EventCard {...event} />
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
     </main>

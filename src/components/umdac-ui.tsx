@@ -7,7 +7,7 @@ export const navItems = [
   { href: '/merch', label: 'Merch' },
 ]
 
-export type EventStatus = 'Open' | 'Closing Soon' | 'Full' | 'Closed' | 'Past Event'
+export type EventStatus = 'Open' | 'Closing Soon' | 'Full' | 'Closed' | 'Past Event' | 'Upcoming' | 'TBA'
 export type RecommendationState = 'available' | 'empty' | 'logged-out' | 'loading' | 'error'
 
 export function SectionHeading({
@@ -36,11 +36,13 @@ export function StatusBadge({ status }: { status: EventStatus }) {
     'Closing Soon': 'bg-amber-100 text-amber-700 ring-amber-200',
     Full: 'bg-rose-100 text-rose-700 ring-rose-200',
     Closed: 'bg-slate-200 text-slate-700 ring-slate-300',
+    Upcoming: 'bg-amber-100 text-amber-800 ring-amber-200',
+    TBA: 'bg-amber-100 text-amber-800 ring-amber-200',
     'Past Event': 'bg-sky-100 text-sky-700 ring-sky-200',
   }
 
   return (
-    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${classes[status]}`}>
+    <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ring-inset ${classes[status] || classes.Open}`}>
       {status}
     </span>
   )
@@ -54,6 +56,7 @@ export function EventCard({
   status,
   description,
   href,
+  imageUrl,
 }: {
   title: string
   date: string
@@ -62,30 +65,46 @@ export function EventCard({
   status: EventStatus
   description: string
   href: string
+  imageUrl?: string
 }) {
   return (
-    <article className="group overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]">
-      <div className="h-40 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-5 text-white">
-        <div className="flex h-full items-start justify-between gap-3">
-          <span className="rounded bg-white/15 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]">
+      <div className="relative h-48 shrink-0 overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-5 text-white">
+        {imageUrl ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageUrl}
+              alt={title}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-slate-950/20" />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600" />
+        )}
+        <div className="relative z-10 flex h-full items-start justify-between gap-3">
+          <span className="rounded bg-black/60 backdrop-blur-sm px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white border border-white/20">
             {type}
           </span>
           <StatusBadge status={status} />
         </div>
       </div>
-      <div className="space-y-4 p-5">
-        <div>
+      <div className="flex flex-1 flex-col justify-between p-5">
+        <div className="space-y-2">
           <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">{date}</p>
-          <h3 className="mt-2 text-xl font-black uppercase tracking-tight text-slate-900">{title}</h3>
+          <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 line-clamp-2">{title}</h3>
+          <p className="text-sm font-medium text-slate-500">{location}</p>
+          <p className="text-sm leading-6 text-slate-600 line-clamp-3">{description}</p>
         </div>
-        <p className="text-sm font-medium text-slate-500">{location}</p>
-        <p className="text-sm leading-6 text-slate-600">{description}</p>
-        <Link
-          href={href}
-          className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-px"
-        >
-          View details
-        </Link>
+        <div className="pt-4">
+          <Link
+            href={href}
+            className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-px"
+          >
+            View details
+          </Link>
+        </div>
       </div>
     </article>
   )

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { AdminEventRecord, CreateEventInput, UpdateEventInput } from '@/app/actions/adminActions'
+import { formatMultiDayRange, parseEventDateTime, parseEventNotice, formatEventNotice } from '@/lib/utils'
 
 type EventModalProps = {
   isOpen: boolean
@@ -38,6 +39,12 @@ export function EventModal({
     image_urls: [],
   })
 
+  const [dateMode, setDateMode] = useState<'single' | 'multi' | 'custom'>('single')
+  const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10))
+  const [endDate, setEndDate] = useState(new Date(Date.now() + 86400000).toISOString().slice(0, 10))
+  const [timeText, setTimeText] = useState('10:00 AM - 1:00 PM MYT')
+  const [customDateText, setCustomDateText] = useState('')
+
   const [checklistInput, setChecklistInput] = useState('')
   const [customUrlInput, setCustomUrlInput] = useState('')
   const [showUrlInput, setShowUrlInput] = useState(false)
@@ -49,20 +56,42 @@ export function EventModal({
 
   useEffect(() => {
     if (initialData) {
-      let formattedDate = ''
+      let initialDateStr = ''
       try {
-        if (initialData.date) {
-          formattedDate = new Date(initialData.date).toISOString().slice(0, 16)
+        if (initialData.date && initialData.date !== 'TBA') {
+          initialDateStr = new Date(initialData.date).toISOString().slice(0, 10)
         }
       } catch {
-        formattedDate = initialData.date || ''
+        initialDateStr = ''
       }
+
+      if (initialData.time_label && initialData.time_label.includes(' | ')) {
+        const parts = initialData.time_label.split(' | ')
+        const datePart = parts[0].trim()
+        const timePart = parts.slice(1).join(' | ').trim()
+        setTimeText(timePart || '10:00 AM - 1:00 PM MYT')
+        setStartDate(initialDateStr || new Date().toISOString().slice(0, 10))
+        setCustomDateText(datePart)
+        if (datePart.includes('&') || datePart.includes('–') || datePart.includes('-') || datePart.includes('and')) {
+          setDateMode('multi')
+        } else {
+          setDateMode('custom')
+        }
+      } else {
+        setStartDate(initialDateStr || new Date().toISOString().slice(0, 10))
+        setTimeText(initialData.time_label || '10:00 AM - 1:00 PM MYT')
+        setCustomDateText('')
+        setDateMode('single')
+      }
+
+      const { noticeText, registrationLink } = parseEventNotice(initialData.notice)
+      const effectiveLink = initialData.registration_link || registrationLink
 
       setFormData({
         title: initialData.title || '',
         slug: initialData.slug || '',
         type: initialData.type || 'Workshop',
-        date: formattedDate,
+        date: initialData.date || new Date().toISOString(),
         time_label: initialData.time_label || '10:00 AM - 1:00 PM MYT',
         location: initialData.location || '',
         seats_label: initialData.seats_label || '',
@@ -71,20 +100,27 @@ export function EventModal({
         is_past: Boolean(initialData.is_past),
         description: initialData.description || '',
         writeup: initialData.writeup || '',
-        notice: initialData.notice || '',
+        notice: noticeText || '',
         cta_label: initialData.cta_label || 'Register now',
         checklist: Array.isArray(initialData.checklist) ? initialData.checklist : [],
         image_urls: Array.isArray(initialData.image_urls) ? initialData.image_urls : [],
+        registration_link: effectiveLink || null,
+        registration_type: effectiveLink ? 'external' : (initialData.registration_type || 'internal'),
       })
       setChecklistInput(
         Array.isArray(initialData.checklist) ? initialData.checklist.join('\n') : ''
       )
     } else {
+      setStartDate(new Date().toISOString().slice(0, 10))
+      setEndDate(new Date(Date.now() + 86400000).toISOString().slice(0, 10))
+      setTimeText('10:00 AM - 1:00 PM MYT')
+      setCustomDateText('')
+      setDateMode('single')
       setFormData({
         title: '',
         slug: '',
         type: 'Workshop',
-        date: new Date().toISOString().slice(0, 16),
+        date: new Date().toISOString(),
         time_label: '10:00 AM - 1:00 PM MYT',
         location: 'Faculty of Computer Science and Information Technology, UM',
         seats_label: 'Limited to 50 seats',
@@ -97,6 +133,8 @@ export function EventModal({
         cta_label: 'Register now',
         checklist: [],
         image_urls: [],
+        registration_link: null,
+        registration_type: 'internal',
       })
       setChecklistInput('')
     }
@@ -188,9 +226,37 @@ export function EventModal({
       .map((item) => item.trim())
       .filter(Boolean)
 
+    let finalDate = new Date().toISOString()
+    let finalTimeLabel = timeText.trim() || '10:00 AM - 1:00 PM MYT'
+
+    if (dateMode === 'multi') {
+      const rangeLabel = formatMultiDayRange(startDate, endDate)
+      finalDate = startDate ? new Date(startDate).toISOString() : new Date().toISOString()
+      finalTimeLabel = `${rangeLabel} | ${timeText.trim() || '10:00 AM - 1:00 PM MYT'}`
+    } else if (dateMode === 'custom') {
+      finalDate = startDate ? new Date(startDate).toISOString() : new Date().toISOString()
+      const customDateClean = customDateText.trim() || 'TBA'
+      if (customDateClean.toUpperCase() === 'TBA') {
+        finalTimeLabel = 'TBA | TBA'
+      } else {
+        finalTimeLabel = `${customDateClean} | ${timeText.trim() || '10:00 AM - 1:00 PM MYT'}`
+      }
+    } else {
+      finalDate = startDate ? new Date(startDate).toISOString() : new Date().toISOString()
+      finalTimeLabel = timeText.trim() || '10:00 AM - 1:00 PM MYT'
+    }
+
+    const finalNotice = formatEventNotice(
+      formData.notice,
+      formData.registration_type === 'external' ? formData.registration_link : null
+    )
+
     try {
       await onSave({
         ...formData,
+        date: finalDate,
+        time_label: finalTimeLabel,
+        notice: finalNotice,
         checklist: parsedChecklist,
         image_urls: formData.image_urls || [],
         capacity: formData.capacity ? Number(formData.capacity) : null,
@@ -325,17 +391,17 @@ export function EventModal({
 
               <div>
                 <label className="block text-xs font-black uppercase text-slate-700 mb-1">
-                  Status
+                  Registration Status
                 </label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                   className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
                 >
-                  <option value="upcoming">Upcoming</option>
-                  <option value="active">Active (Registration Open)</option>
-                  <option value="closed">Registration Closed</option>
-                  <option value="completed">Completed</option>
+                  <option value="active">🟢 Registration Open</option>
+                  <option value="closed">🔴 Registration Closed</option>
+                  <option value="upcoming">⏳ Upcoming (TBA)</option>
+                  <option value="completed">🏁 Completed</option>
                 </select>
               </div>
 
@@ -360,52 +426,236 @@ export function EventModal({
               </div>
             </div>
 
-            {/* Date, Time label, Seats/Capacity */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-black uppercase text-slate-700 mb-1">
-                  Date & Time
+            {/* Event Date & Schedule */}
+            <div className="border-2 border-slate-900 rounded-xl p-4 bg-slate-50 space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <label className="block text-xs font-black uppercase text-slate-800">
+                  Event Schedule & Date(s) *
                 </label>
-                <input
-                  type="datetime-local"
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium"
-                />
+                <div className="inline-flex rounded-lg border-2 border-slate-900 p-0.5 bg-white text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() => setDateMode('single')}
+                    className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                      dateMode === 'single'
+                        ? 'bg-purple-600 text-white shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Single Day
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDateMode('multi')}
+                    className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                      dateMode === 'multi'
+                        ? 'bg-purple-600 text-white shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Multi-Day (e.g. 23 & 24 Feb)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDateMode('custom')}
+                    className={`px-2.5 py-1 rounded-md transition-colors cursor-pointer ${
+                      dateMode === 'custom'
+                        ? 'bg-purple-600 text-white shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Custom / TBA
+                  </button>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-black uppercase text-slate-700 mb-1">
-                  Time Label (Default MYT)
-                </label>
-                <input
-                  type="text"
-                  value={formData.time_label || '10:00 AM - 1:00 PM MYT'}
-                  onChange={(e) => setFormData({ ...formData, time_label: e.target.value })}
-                  placeholder="e.g. 10:00 AM - 1:00 PM MYT"
-                  className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium"
-                />
+              {dateMode === 'single' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1">
+                      Event Date
+                    </label>
+                    <input
+                      type="date"
+                      required
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1">
+                      Time Label
+                    </label>
+                    <input
+                      type="text"
+                      value={timeText}
+                      onChange={(e) => setTimeText(e.target.value)}
+                      placeholder="e.g. 10:00 AM - 1:00 PM MYT"
+                      className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {dateMode === 'multi' && (
+                <div className="space-y-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">
+                        Start Date
+                      </label>
+                      <input
+                        type="date"
+                        required
+                        value={startDate}
+                        onChange={(e) => setStartDate(e.target.value)}
+                        className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">
+                        End Date
+                      </label>
+                      <input
+                        type="date"
+                        required
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-600 mb-1">
+                        Daily Time / Hours
+                      </label>
+                      <input
+                        type="text"
+                        value={timeText}
+                        onChange={(e) => setTimeText(e.target.value)}
+                        placeholder="e.g. 9:00 AM - 6:00 PM MYT"
+                        className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 p-2.5 bg-purple-50 border border-purple-200 rounded-lg text-xs font-bold text-purple-900">
+                    <span>📅 Formatted Date Display:</span>
+                    <span className="font-black bg-purple-200/80 px-2 py-0.5 rounded text-purple-950">
+                      {formatMultiDayRange(startDate, endDate)}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {dateMode === 'custom' && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1">
+                      Custom Date Display
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={customDateText}
+                      onChange={(e) => setCustomDateText(e.target.value)}
+                      placeholder="e.g. 23 and 24 Feb, or TBA"
+                      className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-600 mb-1">
+                      Time Label
+                    </label>
+                    <input
+                      type="text"
+                      value={timeText}
+                      onChange={(e) => setTimeText(e.target.value)}
+                      placeholder="e.g. 10:00 AM - 1:00 PM MYT"
+                      className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium bg-white"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+
+
+            {/* Registration Method Selector */}
+            <div className="border-2 border-slate-900 rounded-xl p-4 bg-purple-50/40 space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <label className="block text-xs font-black uppercase text-slate-800">
+                    Registration Method *
+                  </label>
+                  <p className="text-[11px] font-medium text-slate-500">
+                    Choose whether members register directly on the website or via an external link (Google Form, Luma, etc.)
+                  </p>
+                </div>
+                <div className="inline-flex rounded-lg border-2 border-slate-900 p-0.5 bg-white text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        registration_type: 'internal',
+                        registration_link: null,
+                        cta_label: prev.cta_label === 'Register on External Form' ? 'Register now' : prev.cta_label,
+                      }))
+                    }
+                    className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${
+                      (formData.registration_type || 'internal') === 'internal' && !formData.registration_link
+                        ? 'bg-purple-600 text-white shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    👥 On Website (Admin Views Participants)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        registration_type: 'external',
+                        registration_link: prev.registration_link || '',
+                        cta_label: prev.cta_label === 'Register now' ? 'Register on External Form' : prev.cta_label,
+                      }))
+                    }
+                    className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${
+                      formData.registration_type === 'external' || Boolean(formData.registration_link)
+                        ? 'bg-purple-600 text-white shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    🔗 External Registration Link
+                  </button>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-black uppercase text-slate-700 mb-1">
-                  Capacity (Max Seats)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={formData.capacity ?? ''}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      capacity: e.target.value ? Number(e.target.value) : undefined,
-                      seats_label: e.target.value ? `Limited to ${e.target.value} seats` : 'Limited seating',
-                    })
-                  }
-                  placeholder="e.g. 60"
-                  className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-medium"
-                />
-              </div>
+              {(formData.registration_type === 'external' || Boolean(formData.registration_link)) && (
+                <div className="pt-2 border-t border-purple-200 space-y-2">
+                  <label className="block text-xs font-bold text-purple-950">
+                    External Registration URL * (Google Form / Luma / Eventbrite / Typeform)
+                  </label>
+                  <input
+                    type="url"
+                    required
+                    value={formData.registration_link || ''}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        registration_link: e.target.value,
+                        registration_type: 'external',
+                      })
+                    }
+                    placeholder="https://forms.gle/... or https://lu.ma/..."
+                    className="w-full px-3 py-2 text-sm border-2 border-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono bg-white"
+                  />
+                  <p className="text-[11px] text-purple-800 font-medium">
+                    When set, clicking register on the website redirects users directly to this link. Participant tracking will happen on that external form.
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Location & CTA */}

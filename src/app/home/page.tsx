@@ -6,14 +6,16 @@ import Link from 'next/link'
 import { EventCard, SectionHeading } from '@/components/umdac-ui'
 import { createClient } from '@/lib/supabase/client'
 import type { User } from '@supabase/supabase-js'
+import { fetchAdminEventsAction, AdminEventRecord } from '@/app/actions/adminActions'
+import { parseEventDateTime } from '@/lib/utils'
 
-const featuredEvents = [
+const fallbackUpcoming = [
   {
     title: 'Startup Bootcamp',
     date: 'TBA',
     type: 'Bootcamp',
     location: 'TBA',
-    status: 'Open' as const,
+    status: 'TBA' as const,
     description: 'Learn how to build and scale your ideas in our intensive startup bootcamp designed for student founders.',
     href: '/events/startup-bootcamp',
   },
@@ -22,7 +24,7 @@ const featuredEvents = [
     date: 'TBA',
     type: 'Competition',
     location: 'TBA',
-    status: 'Open' as const,
+    status: 'TBA' as const,
     description: 'A challenge to solve real-world problems using data analytics, machine learning, and storytelling.',
     href: '/events/datathon',
   },
@@ -31,7 +33,7 @@ const featuredEvents = [
     date: 'TBA',
     type: 'Fair',
     location: 'TBA',
-    status: 'Open' as const,
+    status: 'TBA' as const,
     description: 'Connect with industry professionals, explore career opportunities, and discover the latest in data technology.',
     href: '/events/data-fair',
   },
@@ -47,12 +49,12 @@ const pillars = [
     description: 'Hands-on project work, technical growth, and practical experience that strengthens problem-solving skills.',
   },
   {
-    title: 'Data@',
+    title: 'DATA CAREER',
     description: 'Industry conversations, networking, and career exposure that connect club learning with real-world opportunities.',
   },
 ]
 
-const pastEvents = [
+const fallbackPast = [
   {
     title: 'Data Debut 2025',
     date: '12 October 2025',
@@ -78,6 +80,22 @@ export default function HomePage() {
   const [introSrc, setIntroSrc] = useState('')
   const [imageLoaded, setImageLoaded] = useState(false)
   const [user, setUser] = useState<User | null>(null)
+  const [dbEvents, setDbEvents] = useState<AdminEventRecord[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadEvents() {
+      try {
+        const data = await fetchAdminEventsAction()
+        setDbEvents(data)
+      } catch (err) {
+        console.error('Failed to load events for home page:', err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    loadEvents()
+  }, [])
 
   useEffect(() => {
     const supabase = createClient()
@@ -176,11 +194,11 @@ export default function HomePage() {
         </div>
         <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
           <dt className="text-xs font-black uppercase tracking-widest text-slate-500">Practical Workshops</dt>
-          <dd className="mt-2 text-4xl font-black text-purple-600">30+</dd>
+          <dd className="mt-2 text-4xl font-black text-purple-600">10+</dd>
         </div>
         <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
           <dt className="text-xs font-black uppercase tracking-widest text-slate-500">Collaborative Projects</dt>
-          <dd className="mt-2 text-4xl font-black text-pink-600">40+</dd>
+          <dd className="mt-2 text-4xl font-black text-pink-600">20+</dd>
         </div>
       </section>
 
@@ -210,11 +228,65 @@ export default function HomePage() {
           <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 md:text-5xl">Opportunities to learn & build</h2>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
-          {featuredEvents.map((event) => (
-            <div key={event.title} className="hover:translate-y-[-4px] transition-transform duration-200">
-              <EventCard {...event} />
-            </div>
-          ))}
+          {(() => {
+            const mappedUpcoming = dbEvents
+              .filter((e) => !e.is_past)
+              .map((e) => {
+                const { displayDate } = parseEventDateTime(e.date, e.time_label)
+                const isTba = displayDate.toUpperCase() === 'TBA' || e.status === 'upcoming' || e.status === 'tba'
+                let badgeStatus: any = 'Open'
+                if (isTba) {
+                  badgeStatus = 'TBA'
+                } else if (e.status === 'closed' || e.status === 'completed' || e.status === 'cancelled') {
+                  badgeStatus = 'Closed'
+                } else if (e.status === 'active' || e.status === 'open') {
+                  badgeStatus = 'Open'
+                }
+
+                return {
+                  title: e.title,
+                  date: displayDate,
+                  rawDate: e.date,
+                  type: e.type || 'Event',
+                  location: e.location || 'TBA',
+                  status: badgeStatus,
+                  description: e.description || '',
+                  href: `/events/${e.slug || e.event_id}`,
+                  imageUrl: e.image_urls?.[0],
+                }
+              })
+              .sort((a, b) => {
+                const getPriority = (status: string) => {
+                  if (status === 'Open' || status === 'Closing Soon') return 0
+                  if (status === 'Closed') return 1
+                  return 2 // TBA / Upcoming
+                }
+                const priorityDiff = getPriority(a.status) - getPriority(b.status)
+                if (priorityDiff !== 0) return priorityDiff
+
+                if (a.rawDate && b.rawDate && a.status === 'Open' && b.status === 'Open') {
+                  const timeA = new Date(a.rawDate).getTime()
+                  const timeB = new Date(b.rawDate).getTime()
+                  if (!isNaN(timeA) && !isNaN(timeB)) return timeA - timeB
+                }
+                return 0
+              })
+              .slice(0, 3)
+
+            const list = isLoading ? fallbackUpcoming : mappedUpcoming
+            if (!isLoading && list.length === 0) {
+              return (
+                <div className="col-span-full rounded-2xl border-2 border-slate-900 bg-white p-8 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                  <p className="text-sm font-semibold text-slate-500">No upcoming events currently scheduled.</p>
+                </div>
+              )
+            }
+            return list.map((event) => (
+              <div key={event.title} className="h-full flex flex-col hover:translate-y-[-4px] transition-transform duration-200">
+                <EventCard {...event} />
+              </div>
+            ))
+          })()}
         </div>
       </section>
 
@@ -225,11 +297,38 @@ export default function HomePage() {
           <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 md:text-5xl">Looking back at our community journeys</h2>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
-          {pastEvents.map((event) => (
-            <div key={event.title} className="opacity-85 hover:opacity-100 hover:translate-y-[-4px] transition-all duration-200">
-              <EventCard {...event} />
-            </div>
-          ))}
+          {(() => {
+            const mappedPast = dbEvents
+              .filter((e) => e.is_past)
+              .slice(0, 3)
+              .map((e) => {
+                const { displayDate } = parseEventDateTime(e.date, e.time_label)
+                return {
+                  title: e.title,
+                  date: displayDate,
+                  type: e.type || 'Event',
+                  location: e.location || 'TBA',
+                  status: 'Past Event' as any,
+                  description: e.description || e.writeup || '',
+                  href: `/events/${e.slug || e.event_id}`,
+                  imageUrl: e.image_urls?.[0],
+                }
+              })
+
+            const list = isLoading ? fallbackPast : mappedPast
+            if (!isLoading && list.length === 0) {
+              return (
+                <div className="col-span-full rounded-2xl border-2 border-slate-900 bg-white p-8 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                  <p className="text-sm font-semibold text-slate-500">No past events found.</p>
+                </div>
+              )
+            }
+            return list.map((event) => (
+              <div key={event.title} className="h-full flex flex-col opacity-85 hover:opacity-100 hover:translate-y-[-4px] transition-all duration-200">
+                <EventCard {...event} />
+              </div>
+            ))
+          })()}
         </div>
       </section>
 
