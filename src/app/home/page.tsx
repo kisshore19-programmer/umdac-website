@@ -131,9 +131,9 @@ export default function HomePage() {
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-2xl border-4 border-slate-900 bg-white p-8 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:p-14">
+      <section className="relative overflow-hidden rounded-2xl border-4 border-slate-900 bg-white p-8 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:p-14 dark:border-slate-800 dark:bg-slate-900 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
         {/* Intro WebP Overlay */}
-        <div className={`absolute inset-0 z-20 flex items-center justify-center bg-white transition-opacity duration-1000 ${introFinished ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <div className={`absolute inset-0 z-20 flex items-center justify-center bg-white dark:bg-slate-950 transition-opacity duration-1000 ${introFinished ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
           {introSrc && (
             <img 
               src={introSrc} 
@@ -145,10 +145,10 @@ export default function HomePage() {
         </div>
         <div className="grid gap-10 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="flex flex-col justify-center">
-            <span className="mb-3 inline-flex w-fit items-center rounded bg-slate-100 px-2.5 py-1 text-xs font-extrabold uppercase tracking-widest text-indigo-600">
-              University Malaya Data Analytics Club
+            <span className="mb-3 inline-flex w-fit items-center rounded bg-slate-100 px-2.5 py-1 text-xs font-extrabold uppercase tracking-widest text-indigo-600 dark:bg-slate-800 dark:text-indigo-400">
+              Universiti Malaya Data Analytics Club
             </span>
-            <h1 className="text-4xl font-black uppercase tracking-tight text-slate-900 md:text-7xl">
+            <h1 className="text-4xl font-black uppercase tracking-tight text-slate-900 dark:text-white md:text-7xl">
               Decode.
               <br />
               <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">
@@ -157,14 +157,14 @@ export default function HomePage() {
               <br />
               Excel.
             </h1>
-            <p className="mt-6 max-w-xl text-base font-semibold leading-relaxed text-slate-600">
+            <p className="mt-6 max-w-xl text-base font-semibold leading-relaxed text-slate-600 dark:text-slate-300">
               UMDAC empowers over 500+ student developers and data enthusiasts at Universiti Malaya.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
-              <Link href="/events" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-[2px]">
+              <Link href="/events" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-[2px] dark:border-slate-700">
                 Explore events
               </Link>
-              <Link href="/about" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-white px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider text-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-[2px]">
+              <Link href="/about" className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-white px-6 py-3.5 text-sm font-extrabold uppercase tracking-wider text-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-[2px] dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
                 About Us
               </Link>
             </div>
@@ -172,7 +172,7 @@ export default function HomePage() {
 
           {/* UMDAC Isometric Logo */}
           <div className="flex items-center justify-center">
-            <div className="w-full max-w-md overflow-hidden rounded-xl border-4 border-slate-900 bg-white shadow-[6px_6px_0px_0px_rgba(168,85,247,1)]">
+            <div className="w-full max-w-md overflow-hidden rounded-xl border-4 border-slate-900 bg-white shadow-[6px_6px_0px_0px_rgba(168,85,247,1)] dark:border-slate-700 dark:bg-slate-800 dark:shadow-[6px_6px_0px_0px_rgba(168,85,247,0.7)]">
               <Image 
                 src="/umdac_isometric_logo.jpg" 
                 alt="UMDAC Isometric Logo" 
@@ -188,34 +188,34 @@ export default function HomePage() {
 
       {/* Stats Counter Section */}
       <section className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
-        <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-          <dt className="text-xs font-black uppercase tracking-widest text-slate-500">Active Members</dt>
-          <dd className="mt-2 text-4xl font-black text-indigo-600">500+</dd>
+        <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+          <dt className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Active Members</dt>
+          <dd className="mt-2 text-4xl font-black text-indigo-600 dark:text-indigo-400">500+</dd>
         </div>
-        <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-          <dt className="text-xs font-black uppercase tracking-widest text-slate-500">Practical Workshops</dt>
-          <dd className="mt-2 text-4xl font-black text-purple-600">10+</dd>
+        <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+          <dt className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Practical Workshops</dt>
+          <dd className="mt-2 text-4xl font-black text-purple-600 dark:text-purple-400">10+</dd>
         </div>
-        <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-          <dt className="text-xs font-black uppercase tracking-widest text-slate-500">Collaborative Projects</dt>
-          <dd className="mt-2 text-4xl font-black text-pink-600">20+</dd>
+        <div className="rounded-xl border-2 border-slate-900 bg-slate-50 p-6 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+          <dt className="text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">Collaborative Projects</dt>
+          <dd className="mt-2 text-4xl font-black text-pink-600 dark:text-pink-400">20+</dd>
         </div>
       </section>
 
       {/* Pillars Section */}
       <section className="mt-20">
         <div className="mb-10">
-          <p className="mb-2 text-xs font-black uppercase tracking-widest text-purple-600">OUR CORE PILLARS</p>
-          <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 md:text-5xl">Building Skills, Projects & Connections</h2>
+          <p className="mb-2 text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">OUR CORE PILLARS</p>
+          <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white md:text-5xl">Building Skills, Projects & Connections</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {pillars.map((pillar) => (
-            <div key={pillar.title} className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-lg font-black text-white">
+            <div key={pillar.title} className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-lg font-black text-white dark:border-slate-700">
                 {pillar.title.slice(0, 2).toUpperCase()}
               </div>
-              <h3 className="text-xl font-extrabold uppercase text-slate-900">{pillar.title}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-slate-600">{pillar.description}</p>
+              <h3 className="text-xl font-extrabold uppercase text-slate-900 dark:text-white">{pillar.title}</h3>
+              <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{pillar.description}</p>
             </div>
           ))}
         </div>
@@ -224,8 +224,8 @@ export default function HomePage() {
       {/* Upcoming Events Section */}
       <section className="mt-20">
         <div className="mb-10">
-          <p className="mb-2 text-xs font-black uppercase tracking-widest text-[#be1e2d] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">UPCOMING EVENTS</p>
-          <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 md:text-5xl">Opportunities to learn & build</h2>
+          <p className="mb-2 text-xs font-black uppercase tracking-widest bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">UPCOMING EVENTS</p>
+          <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white md:text-5xl">Opportunities to learn & build</h2>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {(() => {
@@ -276,8 +276,8 @@ export default function HomePage() {
             const list = isLoading ? fallbackUpcoming : mappedUpcoming
             if (!isLoading && list.length === 0) {
               return (
-                <div className="col-span-full rounded-2xl border-2 border-slate-900 bg-white p-8 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-                  <p className="text-sm font-semibold text-slate-500">No upcoming events currently scheduled.</p>
+                <div className="col-span-full rounded-2xl border-2 border-slate-900 bg-white p-8 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+                  <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">No upcoming events currently scheduled.</p>
                 </div>
               )
             }
@@ -293,8 +293,8 @@ export default function HomePage() {
       {/* Past Events & Write-ups Section */}
       <section className="mt-20">
         <div className="mb-10">
-          <p className="mb-2 text-xs font-black uppercase tracking-widest text-slate-500">PAST EVENTS & WRITE-UPS</p>
-          <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 md:text-5xl">Looking back at our community journeys</h2>
+          <p className="mb-2 text-xs font-black uppercase tracking-widest text-slate-500 dark:text-slate-400">PAST EVENTS & WRITE-UPS</p>
+          <h2 className="text-3xl font-black uppercase tracking-tight text-slate-900 dark:text-white md:text-5xl">Looking back at our community journeys</h2>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           {(() => {
@@ -318,8 +318,8 @@ export default function HomePage() {
             const list = isLoading ? fallbackPast : mappedPast
             if (!isLoading && list.length === 0) {
               return (
-                <div className="col-span-full rounded-2xl border-2 border-slate-900 bg-white p-8 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-                  <p className="text-sm font-semibold text-slate-500">No past events found.</p>
+                <div className="col-span-full rounded-2xl border-2 border-slate-900 bg-white p-8 text-center shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+                  <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">No past events found.</p>
                 </div>
               )
             }
@@ -334,7 +334,7 @@ export default function HomePage() {
 
       {/* Join Callout Section - Only displayed for unauthenticated visitors */}
       {!user ? (
-        <section className="mt-20 rounded-2xl border-4 border-slate-900 bg-slate-950 px-6 py-10 text-white shadow-[8px_8px_0px_0px_rgba(168,85,247,1)] md:px-10">
+        <section className="mt-20 rounded-2xl border-4 border-slate-900 bg-slate-950 px-6 py-10 text-white shadow-[8px_8px_0px_0px_rgba(168,85,247,1)] md:px-10 dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(168,85,247,0.7)]">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-xs font-black uppercase tracking-widest text-pink-400">BECOME A MEMBER</p>

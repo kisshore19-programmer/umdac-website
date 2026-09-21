@@ -23,9 +23,9 @@ export default function SignUpPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto grid w-full max-w-6xl overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="p-8 text-white md:p-10 border-b-4 border-slate-900 lg:border-b-0 lg:border-r-4">
+    <main className="min-h-screen flex items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8 dark:bg-slate-950">
+      <div className="mx-auto grid w-full max-w-6xl overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:grid-cols-[0.9fr_1.1fr] dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
+        <div className="p-8 text-white md:p-10 border-b-4 border-slate-900 lg:border-b-0 lg:border-r-4 dark:border-slate-800">
           <p className="text-xs font-black uppercase tracking-widest text-white/80">Become a member</p>
           <h1 className="mt-4 text-4xl font-black uppercase tracking-tight md:text-5xl">Create your UMDAC profile</h1>
           <p className="mt-4 max-w-md text-base font-semibold leading-relaxed text-white/90">
@@ -33,11 +33,11 @@ export default function SignUpPage() {
           </p>
 
           <div className="mt-8 space-y-4 text-sm text-white/90">
-            <div className="rounded-xl border-2 border-slate-900 bg-slate-900 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+            <div className="rounded-xl border-2 border-slate-900 bg-slate-900 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-950">
               <p className="font-black uppercase tracking-wide text-white">Beginner friendly</p>
               <p className="mt-2 font-semibold">Start with workshops and learn in a supportive environment.</p>
             </div>
-            <div className="rounded-xl border-2 border-slate-900 bg-slate-900 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+            <div className="rounded-xl border-2 border-slate-900 bg-slate-900 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-950">
               <p className="font-black uppercase tracking-wide text-white">Hands-on growth</p>
               <p className="mt-2 font-semibold">Build skills through projects, events, and mentorship.</p>
             </div>
@@ -56,56 +56,56 @@ export default function SignUpPage() {
                 <label htmlFor="full_name" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   Full name
                 </label>
-                <input id="full_name" name="full_name" placeholder="Your full name" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="full_name" name="full_name" placeholder="Your full name" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
 
               <div className="md:col-span-2">
                 <label htmlFor="email" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   Email address
                 </label>
-                <input id="email" name="email" type="email" placeholder="testing123@gmail.com" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="email" name="email" type="email" placeholder="testing123@gmail.com" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
 
               <div className="md:col-span-2">
                 <label htmlFor="password" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   Password
                 </label>
-                <input id="password" name="password" type="password" placeholder="••••••••••••••" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="password" name="password" type="password" placeholder="••••••••••••••" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
 
               <div>
                 <label htmlFor="university" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   University
                 </label>
-                <input id="university" name="university" placeholder="Universiti Malaya" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="university" name="university" placeholder="Universiti Malaya" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
 
               <div>
                 <label htmlFor="faculty" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   Faculty
                 </label>
-                <input id="faculty" name="faculty" placeholder="Faculty of Computer Science" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="faculty" name="faculty" placeholder="Faculty of Computer Science" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
 
               <div>
                 <label htmlFor="major" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   Major
                 </label>
-                <input id="major" name="major" placeholder="Computer Science" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="major" name="major" placeholder="Computer Science" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
 
               <div>
                 <label htmlFor="year_of_study" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   Year of study
                 </label>
-                <input id="year_of_study" name="year_of_study" type="number" min="1" max="7" placeholder="2" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="year_of_study" name="year_of_study" type="number" min="1" max="7" placeholder="2" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
 
               <div>
                 <label htmlFor="semester" className="mb-2 block text-sm font-black uppercase tracking-wide text-white">
                   Semester
                 </label>
-                <input id="semester" name="semester" type="number" min="1" max="3" placeholder="1" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`} />
+                <input id="semester" name="semester" type="number" min="1" max="3" placeholder="1" required className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${errorMessage ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`} />
               </div>
             </div>
 
@@ -118,7 +118,7 @@ export default function SignUpPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-6 inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-3 text-base font-black uppercase tracking-widest text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-0 active:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] disabled:cursor-not-allowed disabled:opacity-80"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-3 text-base font-black uppercase tracking-widest text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-0 active:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] disabled:cursor-not-allowed disabled:opacity-80 dark:border-slate-700"
             >
               {loading ? 'Creating account...' : 'Create Account'}
             </button>

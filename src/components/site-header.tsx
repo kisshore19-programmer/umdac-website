@@ -7,6 +7,8 @@ import { usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { logoutAction } from '@/app/actions/auth'
 
+import { ThemeToggle } from '@/components/theme-toggle'
+
 const navItems = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About Us' },
@@ -97,7 +99,7 @@ export function SiteHeader({
   }, [initialUser, userName])
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-slate-50/90 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-slate-200 bg-slate-50/90 backdrop-blur transition-colors dark:border-slate-800 dark:bg-slate-950/90">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
         <Link href="/" className="flex items-center" aria-label="UMDAC home">
           <Image
@@ -105,7 +107,7 @@ export function SiteHeader({
             alt="UMDAC Logo"
             width={120}
             height={40}
-            className="h-10 w-auto object-contain"
+            className="h-10 w-auto object-contain dark:brightness-110"
             priority
           />
         </Link>
@@ -116,7 +118,9 @@ export function SiteHeader({
               key={item.href}
               href={item.href}
               className={`text-sm font-medium transition ${
-                pathname === item.href ? 'text-[#0284c7]' : 'text-slate-600 hover:text-[#0284c7]'
+                pathname === item.href
+                  ? 'text-[#0284c7] dark:text-[#38bdf8] font-bold'
+                  : 'text-slate-600 hover:text-[#0284c7] dark:text-slate-300 dark:hover:text-[#38bdf8]'
               }`}
             >
               {item.label}
@@ -125,16 +129,18 @@ export function SiteHeader({
         </nav>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
+
           {user ? (
             <div className="flex items-center gap-3">
-              <span className="hidden text-sm font-bold text-slate-800 sm:inline-block">
-                Hello, <span className="text-indigo-600 font-extrabold">{userName || 'Member'}</span>!
+              <span className="hidden text-sm font-bold text-slate-800 dark:text-slate-200 sm:inline-block">
+                Hello, <span className="text-indigo-600 dark:text-indigo-400 font-extrabold">{userName || 'Member'}</span>!
               </span>
 
               {adminRole && (
                 <Link
                   href="/admin"
-                  className="hidden rounded-full border border-purple-300 bg-purple-50 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-purple-700 transition hover:bg-purple-100 sm:inline-flex"
+                  className="hidden rounded-full border border-purple-300 bg-purple-50 px-3 py-1.5 text-xs font-black uppercase tracking-wider text-purple-700 transition hover:bg-purple-100 dark:border-purple-800 dark:bg-purple-950/50 dark:text-purple-300 dark:hover:bg-purple-900/50 sm:inline-flex"
                 >
                   Admin
                 </Link>
@@ -143,7 +149,7 @@ export function SiteHeader({
               <form action={logoutAction}>
                 <button
                   type="submit"
-                  className="rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-900 transition hover:bg-red-50 hover:text-red-600 hover:border-red-200 shadow-sm"
+                  className="rounded-full border border-slate-300 bg-white px-4 py-2 text-xs font-bold text-slate-900 transition hover:bg-red-50 hover:text-red-600 hover:border-red-200 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-red-950/40 dark:hover:text-red-400 dark:hover:border-red-900"
                 >
                   Sign Out
                 </button>
@@ -153,13 +159,13 @@ export function SiteHeader({
             <>
               <Link
                 href="/login"
-                className="hidden rounded-full border border-slate-300 bg-white px-5 py-2 text-sm font-bold text-slate-900 transition hover:bg-slate-50 sm:inline-flex"
+                className="hidden rounded-full border border-slate-300 bg-white px-5 py-2 text-sm font-bold text-slate-900 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 sm:inline-flex"
               >
                 Login
               </Link>
               <Link
                 href="/signup"
-                className="inline-flex items-center justify-center rounded-full bg-[#111827] px-5 py-2 text-sm font-bold text-white transition hover:bg-slate-800 focus:outline-none"
+                className="inline-flex items-center justify-center rounded-full bg-[#111827] px-5 py-2 text-sm font-bold text-white transition hover:bg-slate-800 focus:outline-none dark:bg-indigo-600 dark:hover:bg-indigo-500"
               >
                 Join now
               </Link>
@@ -171,7 +177,7 @@ export function SiteHeader({
             aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileOpen}
             onClick={() => setMobileOpen((current) => !current)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-800 transition hover:border-[#0284c7] hover:text-[#0284c7] md:hidden focus:outline-none focus:ring-2 focus:ring-[#0284c7] focus:ring-offset-2"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-800 transition hover:border-[#0284c7] hover:text-[#0284c7] md:hidden focus:outline-none focus:ring-2 focus:ring-[#0284c7] focus:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-[#38bdf8] dark:hover:text-[#38bdf8]"
           >
             {mobileOpen ? '×' : '☰'}
           </button>
@@ -179,7 +185,7 @@ export function SiteHeader({
       </div>
 
       {mobileOpen ? (
-        <nav aria-label="Mobile navigation" className="border-t border-slate-200 bg-white md:hidden">
+        <nav aria-label="Mobile navigation" className="border-t border-slate-200 bg-white transition-colors dark:border-slate-800 dark:bg-slate-900 md:hidden">
           <div className="mx-auto flex max-w-7xl flex-col px-4 py-3 sm:px-6">
             {navItems.map((item) => (
               <Link
@@ -188,8 +194,8 @@ export function SiteHeader({
                 onClick={() => setMobileOpen(false)}
                 className={`rounded-xl px-3 py-2 text-sm font-medium transition ${
                   pathname === item.href
-                    ? 'bg-sky-50 text-[#0284c7]'
-                    : 'text-slate-700 hover:bg-slate-100 hover:text-[#0284c7]'
+                    ? 'bg-sky-50 text-[#0284c7] dark:bg-sky-950/50 dark:text-[#38bdf8]'
+                    : 'text-slate-700 hover:bg-slate-100 hover:text-[#0284c7] dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-[#38bdf8]'
                 }`}
               >
                 {item.label}
@@ -198,14 +204,14 @@ export function SiteHeader({
             {user ? (
               <div className="mt-2 space-y-2">
                 <div className="flex items-center justify-between px-3 py-1">
-                  <span className="text-sm font-bold text-slate-800">
-                    Hello, <span className="text-indigo-600 font-extrabold">{userName || 'Member'}</span>!
+                  <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                    Hello, <span className="text-indigo-600 dark:text-indigo-400 font-extrabold">{userName || 'Member'}</span>!
                   </span>
                   {adminRole && (
                     <Link
                       href="/admin"
                       onClick={() => setMobileOpen(false)}
-                      className="rounded bg-purple-100 px-2 py-0.5 text-xs font-bold text-purple-700"
+                      className="rounded bg-purple-100 px-2 py-0.5 text-xs font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300"
                     >
                       Admin
                     </Link>
@@ -215,7 +221,7 @@ export function SiteHeader({
                   <button
                     type="submit"
                     onClick={() => setMobileOpen(false)}
-                    className="w-full rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-center text-sm font-semibold text-red-600 transition hover:bg-red-100"
+                    className="w-full rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-center text-sm font-semibold text-red-600 transition hover:bg-red-100 dark:border-red-900/50 dark:bg-red-950/50 dark:text-red-300 dark:hover:bg-red-900/50"
                   >
                     Sign Out
                   </button>
@@ -226,14 +232,14 @@ export function SiteHeader({
                 <Link
                   href="/login"
                   onClick={() => setMobileOpen(false)}
-                  className="mt-2 rounded-xl border border-slate-300 px-3 py-2 text-center text-sm font-semibold text-slate-800 transition hover:bg-slate-50 hover:text-[#0284c7]"
+                  className="mt-2 rounded-xl border border-slate-300 px-3 py-2 text-center text-sm font-semibold text-slate-800 transition hover:bg-slate-50 hover:text-[#0284c7] dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
                 >
                   Login
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setMobileOpen(false)}
-                  className="mt-2 rounded-xl bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-slate-800"
+                  className="mt-2 rounded-xl bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white transition hover:bg-slate-800 dark:bg-indigo-600 dark:hover:bg-indigo-500"
                 >
                   Join now
                 </Link>

@@ -29,7 +29,7 @@ export default async function MerchPage() {
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
 
       {/* Page header — matches home page hero card style */}
-      <section className="flex min-h-[225px] flex-col justify-center overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:min-h-[255px] md:p-10">
+      <section className="flex min-h-[225px] flex-col justify-center overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:min-h-[255px] md:p-10 dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-black uppercase tracking-tight text-white md:text-6xl">
             Our{' '}
@@ -46,7 +46,7 @@ export default async function MerchPage() {
       {/* Section label */}
       <section className="mt-14">
         <div className="mb-8">
-          <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900 md:text-4xl">
+          <h2 className="text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white md:text-4xl">
             Available Items
           </h2>
         </div>

@@ -33,7 +33,7 @@ export default async function AdminDashboardLayout({
     metaName || profile?.name || user.email?.split('@')[0] || 'Administrator'
 
   return (
-    <div className="flex min-h-[calc(100vh-73px)] bg-slate-50">
+    <div className="flex min-h-[calc(100vh-73px)] bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
       <AdminSidebar adminName={adminName} />
       <main className="flex-1 p-8 overflow-y-auto">
         {children}

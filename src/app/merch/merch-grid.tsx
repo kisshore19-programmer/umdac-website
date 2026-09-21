@@ -15,9 +15,9 @@ function MerchCard({
 
   return (
     <div className="group relative">
-      <article className="overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 group-hover:-translate-y-1 group-hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]">
+      <article className="overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 group-hover:-translate-y-1 group-hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
         {/* Image area */}
-        <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+        <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           {item.image_url ? (
             <Image
               src={item.image_url}
@@ -27,8 +27,8 @@ function MerchCard({
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100">
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500">
+            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 dark:from-indigo-950 dark:via-purple-950 dark:to-pink-950">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:border-slate-700">
                 <svg className="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
                 </svg>
@@ -69,16 +69,16 @@ function MerchCard({
 function EmptyMerchState() {
   return (
     <div className="col-span-full">
-      <div className="rounded-2xl border-4 border-dashed border-slate-300 bg-white p-16 text-center">
-        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+      <div className="rounded-2xl border-4 border-dashed border-slate-300 bg-white p-16 text-center dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700">
           <svg className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
           </svg>
         </div>
-        <h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-slate-900">
+        <h3 className="mt-6 text-2xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
           No merch yet
         </h3>
-        <p className="mt-3 mx-auto max-w-sm text-sm leading-relaxed text-slate-500">
+        <p className="mt-3 mx-auto max-w-sm text-sm leading-relaxed text-slate-500 dark:text-slate-400">
           We&apos;re cooking up something special. Check back soon for exclusive UMDAC merchandise!
         </p>
       </div>

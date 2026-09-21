@@ -21,24 +21,24 @@ export function SectionHeading({
 }) {
   return (
     <div className="mb-8 max-w-2xl">
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-sky-700">
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-sky-700 dark:text-sky-400">
         {eyebrow}
       </p>
-      <h2 className="text-3xl font-bold tracking-tight text-slate-900 md:text-4xl">{title}</h2>
-      {description ? <p className="mt-4 text-base leading-7 text-slate-600">{description}</p> : null}
+      <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white md:text-4xl">{title}</h2>
+      {description ? <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">{description}</p> : null}
     </div>
   )
 }
 
 export function StatusBadge({ status }: { status: EventStatus }) {
   const classes: Record<EventStatus, string> = {
-    Open: 'bg-emerald-100 text-emerald-700 ring-emerald-200',
-    'Closing Soon': 'bg-amber-100 text-amber-700 ring-amber-200',
-    Full: 'bg-rose-100 text-rose-700 ring-rose-200',
-    Closed: 'bg-slate-200 text-slate-700 ring-slate-300',
-    Upcoming: 'bg-amber-100 text-amber-800 ring-amber-200',
-    TBA: 'bg-amber-100 text-amber-800 ring-amber-200',
-    'Past Event': 'bg-sky-100 text-sky-700 ring-sky-200',
+    Open: 'bg-emerald-100 text-emerald-700 ring-emerald-200 dark:bg-emerald-950/60 dark:text-emerald-400 dark:ring-emerald-800',
+    'Closing Soon': 'bg-amber-100 text-amber-700 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:ring-amber-800',
+    Full: 'bg-rose-100 text-rose-700 ring-rose-200 dark:bg-rose-950/60 dark:text-rose-400 dark:ring-rose-800',
+    Closed: 'bg-slate-200 text-slate-700 ring-slate-300 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-700',
+    Upcoming: 'bg-amber-100 text-amber-800 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:ring-amber-800',
+    TBA: 'bg-amber-100 text-amber-800 ring-amber-200 dark:bg-amber-950/60 dark:text-amber-400 dark:ring-amber-800',
+    'Past Event': 'bg-sky-100 text-sky-700 ring-sky-200 dark:bg-sky-950/60 dark:text-sky-400 dark:ring-sky-800',
   }
 
   return (
@@ -68,7 +68,7 @@ export function EventCard({
   imageUrl?: string
 }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] dark:hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.9)]">
       <div className="relative h-48 shrink-0 overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-5 text-white">
         {imageUrl ? (
           <>
@@ -92,15 +92,15 @@ export function EventCard({
       </div>
       <div className="flex flex-1 flex-col justify-between p-5">
         <div className="space-y-2">
-          <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">{date}</p>
-          <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 line-clamp-2">{title}</h3>
-          <p className="text-sm font-medium text-slate-500">{location}</p>
-          <p className="text-sm leading-6 text-slate-600 line-clamp-3">{description}</p>
+          <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">{date}</p>
+          <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white line-clamp-2">{title}</h3>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{location}</p>
+          <p className="text-sm leading-6 text-slate-600 dark:text-slate-300 line-clamp-3">{description}</p>
         </div>
         <div className="pt-4">
           <Link
             href={href}
-            className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-px"
+            className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-px dark:border-slate-700"
           >
             View details
           </Link>
@@ -211,16 +211,16 @@ export function MerchCard({
 
 export function FaqItem({ question, answer }: { question: string; answer: string }) {
   return (
-    <details className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm open:border-sky-200 open:shadow-md">
-      <summary className="cursor-pointer list-none text-lg font-semibold text-slate-900 marker:hidden">
+    <details className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm open:border-sky-200 open:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:open:border-sky-700">
+      <summary className="cursor-pointer list-none text-lg font-semibold text-slate-900 dark:text-white marker:hidden">
         <span className="flex items-center justify-between gap-4">
           {question}
-          <span className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-bold text-slate-600 transition group-open:rotate-45">
+          <span className="rounded-full border border-slate-200 px-2.5 py-1 text-xs font-bold text-slate-600 transition group-open:rotate-45 dark:border-slate-700 dark:text-slate-300">
             +
           </span>
         </span>
       </summary>
-      <p className="mt-4 text-base leading-7 text-slate-600">{answer}</p>
+      <p className="mt-4 text-base leading-7 text-slate-600 dark:text-slate-300">{answer}</p>
     </details>
   )
 }
@@ -233,9 +233,9 @@ export function EmptyState({
   description: string
 }) {
   return (
-    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-      <h3 className="text-xl font-semibold text-slate-900">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
+    <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center dark:border-slate-700 dark:bg-slate-900/50">
+      <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{title}</h3>
+      <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">{description}</p>
     </div>
   )
 }
@@ -254,18 +254,18 @@ export function RecommendationCard({
   href: string
 }) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-sky-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-sky-700">
       <div className="flex items-start justify-between gap-4">
-        <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-700">
+        <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-700 dark:bg-sky-950 dark:text-sky-300">
           {type}
         </span>
-        <span className="text-xs font-medium text-slate-500">{date}</span>
+        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{date}</span>
       </div>
-      <h3 className="mt-4 text-xl font-semibold text-slate-900">{title}</h3>
-      {reason ? <p className="mt-3 text-sm text-sky-700">{reason}</p> : null}
+      <h3 className="mt-4 text-xl font-semibold text-slate-900 dark:text-white">{title}</h3>
+      {reason ? <p className="mt-3 text-sm text-sky-700 dark:text-sky-400">{reason}</p> : null}
       <Link
         href={href}
-        className="mt-5 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+        className="mt-5 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-sky-500 dark:hover:text-sky-400"
       >
         View event
       </Link>
@@ -290,11 +290,11 @@ export function RecommendationPanel({
     return (
       <div className="grid gap-4 md:grid-cols-3">
         {Array.from({ length: 3 }).map((_, index) => (
-          <div key={`loading-${index}`} className="animate-pulse rounded-2xl border border-slate-200 bg-slate-100 p-5">
-            <div className="h-6 w-20 rounded-full bg-slate-200" />
-            <div className="mt-4 h-5 w-2/3 rounded bg-slate-200" />
-            <div className="mt-3 h-4 w-full rounded bg-slate-200" />
-            <div className="mt-5 h-10 w-28 rounded-full bg-slate-200" />
+          <div key={`loading-${index}`} className="animate-pulse rounded-2xl border border-slate-200 bg-slate-100 p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div className="h-6 w-20 rounded-full bg-slate-200 dark:bg-slate-800" />
+            <div className="mt-4 h-5 w-2/3 rounded bg-slate-200 dark:bg-slate-800" />
+            <div className="mt-3 h-4 w-full rounded bg-slate-200 dark:bg-slate-800" />
+            <div className="mt-5 h-10 w-28 rounded-full bg-slate-200 dark:bg-slate-800" />
           </div>
         ))}
       </div>
@@ -303,9 +303,9 @@ export function RecommendationPanel({
 
   if (state === 'logged-out') {
     return (
-      <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-        <h3 className="text-xl font-semibold text-slate-900">Log in to see recommendations</h3>
-        <p className="mt-2 text-sm leading-6 text-slate-600">
+      <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center dark:border-slate-700 dark:bg-slate-900/50">
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">Log in to see recommendations</h3>
+        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
           Your personalized event suggestions will appear here once your account is connected.
         </p>
       </div>
@@ -323,10 +323,10 @@ export function RecommendationPanel({
 
   if (state === 'error') {
     return (
-      <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-left">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-rose-700">Recommendation update</p>
-        <h3 className="mt-3 text-xl font-semibold text-slate-900">We couldn’t load suggestions right now</h3>
-        <p className="mt-2 text-sm leading-6 text-slate-600">Please refresh or browse upcoming events while the recommendation feed reconnects.</p>
+      <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-left dark:border-rose-900/50 dark:bg-rose-950/40">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-rose-700 dark:text-rose-400">Recommendation update</p>
+        <h3 className="mt-3 text-xl font-semibold text-slate-900 dark:text-white">We couldn’t load suggestions right now</h3>
+        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">Please refresh or browse upcoming events while the recommendation feed reconnects.</p>
       </div>
     )
   }
@@ -363,7 +363,7 @@ export function BlogCard({
   href: string
 }) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md">
+    <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
       <div className="h-40 bg-gradient-to-br from-slate-900 via-sky-700 to-cyan-500 p-5 text-white">
         <div className="flex h-full items-end justify-between">
           <span className="rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-50">
@@ -373,11 +373,11 @@ export function BlogCard({
         </div>
       </div>
       <div className="p-5">
-        <h3 className="text-xl font-semibold text-slate-900">{title}</h3>
-        <p className="mt-3 text-sm leading-6 text-slate-600">{excerpt}</p>
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{title}</h3>
+        <p className="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-300">{excerpt}</p>
         <Link
           href={href}
-          className="mt-5 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+          className="mt-5 inline-flex items-center rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-sky-300 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-sky-500 dark:hover:text-sky-400"
         >
           Read story
         </Link>
@@ -398,24 +398,24 @@ export function ProjectCard({
   href: string
 }) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-sky-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-sky-700">
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-xl font-semibold text-slate-900">{title}</h3>
-        <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-700">
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">{title}</h3>
+        <span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-sky-700 dark:bg-sky-950 dark:text-sky-300">
           Featured
         </span>
       </div>
-      <p className="mt-4 text-sm leading-6 text-slate-600">{description}</p>
+      <p className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p>
       <div className="mt-4 flex flex-wrap gap-2">
         {tags.map((tag) => (
-          <span key={tag} className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600">
+          <span key={tag} className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
             {tag}
           </span>
         ))}
       </div>
       <Link
         href={href}
-        className="mt-5 inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
+        className="mt-5 inline-flex items-center rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:bg-indigo-600 dark:hover:bg-indigo-500"
       >
         View project
       </Link>

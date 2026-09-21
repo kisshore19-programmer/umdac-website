@@ -256,7 +256,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
     <main className="mx-auto w-full max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
 
       {/* Hero banner */}
-      <div className="relative overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)]">
+      <div className="relative overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
         {event.image_urls && event.image_urls.length > 0 && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -290,11 +290,11 @@ export default async function EventDetailPage({ params }: EventPageProps) {
           {event.is_past ? (
             <div className="space-y-8">
               {/* Write-up */}
-              <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
+              <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                   Event Write-up
                 </h2>
-                <p className="mt-4 text-base leading-8 text-slate-600 whitespace-pre-line">
+                <p className="mt-4 text-base leading-8 text-slate-600 dark:text-slate-300 whitespace-pre-line">
                   {event.writeup ||
                     'Our annual event bringing students, industry partners, and tech leaders together.'}
                 </p>
@@ -302,7 +302,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
 
               {/* Image gallery */}
               <div>
-                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
+                <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                   Gallery
                 </h2>
                 <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -313,7 +313,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group relative aspect-video overflow-hidden rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]"
+                        className="group relative aspect-video overflow-hidden rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-800 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -325,12 +325,12 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                     ))
                   ) : (
                     <>
-                      <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                      <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-800/60 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
                         <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
                           Photos Coming Soon
                         </span>
                       </div>
-                      <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+                      <div className="aspect-video flex items-center justify-center rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-800/60 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
                         <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
                           Photos Coming Soon
                         </span>
@@ -343,35 +343,35 @@ export default async function EventDetailPage({ params }: EventPageProps) {
           ) : (
             <div className="space-y-8">
               {/* Notice banner */}
-              <div className="rounded-xl border-2 border-slate-900 bg-indigo-50 p-4 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-                <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600">
+              <div className="rounded-xl border-2 border-slate-900 bg-indigo-50 p-4 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-indigo-950/40 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+                <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">
                   Registration status
                 </p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-700">{displayNotice}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">{displayNotice}</p>
               </div>
 
               {event.description && (
-                <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
+                <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                     About this event
                   </h2>
-                  <p className="mt-4 text-base leading-8 text-slate-600 whitespace-pre-line">{event.description}</p>
+                  <p className="mt-4 text-base leading-8 text-slate-600 dark:text-slate-300 whitespace-pre-line">{event.description}</p>
                 </div>
               )}
 
               {/* What to expect checklist */}
               {event.checklist.length > 0 && (
-                <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
+                <div className="rounded-xl border-2 border-slate-900 bg-white p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                     What to expect
                   </h2>
                   <ul className="mt-4 space-y-3">
                     {event.checklist.map((item) => (
                       <li key={item} className="flex items-start gap-3">
-                        <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-xs font-black text-white shadow-[1px_1px_0px_0px_rgba(15,23,42,1)]">
+                        <span className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 border-slate-900 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-xs font-black text-white shadow-[1px_1px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700">
                           ✓
                         </span>
-                        <span className="text-sm leading-relaxed text-slate-600">{item}</span>
+                        <span className="text-sm leading-relaxed text-slate-600 dark:text-slate-300">{item}</span>
                       </li>
                     ))}
                   </ul>
@@ -381,7 +381,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
               {/* Event Gallery / Photos */}
               {event.image_urls && event.image_urls.length > 0 && (
                 <div>
-                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900">
+                  <h2 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white">
                     Gallery & Highlights
                   </h2>
                   <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -391,7 +391,7 @@ export default async function EventDetailPage({ params }: EventPageProps) {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group relative aspect-video overflow-hidden rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]"
+                        className="group relative aspect-video overflow-hidden rounded-xl border-2 border-slate-900 bg-slate-100 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-800 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -429,29 +429,29 @@ export default async function EventDetailPage({ params }: EventPageProps) {
         </div>
 
         {/* Sidebar */}
-        <aside className="rounded-2xl border-2 border-slate-900 bg-slate-50 p-5 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] h-fit">
-          <h2 className="text-lg font-black uppercase tracking-tight text-slate-900">
+        <aside className="rounded-2xl border-2 border-slate-900 bg-slate-50 p-5 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] h-fit dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+          <h2 className="text-lg font-black uppercase tracking-tight text-slate-900 dark:text-white">
             Event details
           </h2>
           <dl className="mt-5 space-y-4 text-sm">
             <div>
-              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500">Date</dt>
-              <dd className="mt-1 font-semibold text-slate-900">{displayDate}</dd>
+              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500 dark:text-slate-400">Date</dt>
+              <dd className="mt-1 font-semibold text-slate-900 dark:text-slate-100">{displayDate}</dd>
             </div>
             <div>
-              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500">Time</dt>
-              <dd className="mt-1 font-semibold text-slate-900">{displayTime}</dd>
+              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500 dark:text-slate-400">Time</dt>
+              <dd className="mt-1 font-semibold text-slate-900 dark:text-slate-100">{displayTime}</dd>
             </div>
             <div>
-              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500">Venue</dt>
-              <dd className="mt-1 font-semibold text-slate-900">{displayLocation}</dd>
+              <dt className="text-xs font-extrabold uppercase tracking-widest text-slate-500 dark:text-slate-400">Venue</dt>
+              <dd className="mt-1 font-semibold text-slate-900 dark:text-slate-100">{displayLocation}</dd>
             </div>
           </dl>
 
           <div className="mt-6">
             <Link
               href="/events"
-              className="inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-white px-4 py-3 text-sm font-extrabold uppercase tracking-wider text-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-px focus:outline-none"
+              className="inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-white px-4 py-3 text-sm font-extrabold uppercase tracking-wider text-slate-900 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] active:translate-y-px focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]"
             >
               ← Back to events
             </Link>

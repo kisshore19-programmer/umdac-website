@@ -20,18 +20,21 @@ const committeeByDepartment: DepartmentGroup[] = [
         role: 'President',
         image: '/members/amer_hakim.png',
         imagePosition: 'center 15%',
+        linkedin: 'https://www.linkedin.com/in/amer-hakim-b584b3194/',
       },
       {
         name: 'Sanjeevan A/L Kumareson',
         role: 'Vice President',
         image: '/members/sanjeevan.png',
         imagePosition: 'center 15%',
+        linkedin: 'https://www.linkedin.com/in/sanjeevan13/',
       },
       {
         name: 'Harshini A/P Kumara Vell',
         role: 'Secretary',
         image: '/members/harshini.jpg',
         imagePosition: 'center 20%',
+        linkedin: 'https://www.linkedin.com/in/harshini-kumara-vell/',
       },
       {
         name: 'Narmathaa A/P Selvakumaran',
@@ -44,12 +47,14 @@ const committeeByDepartment: DepartmentGroup[] = [
         role: 'Treasurer',
         image: '/members/tronan.png',
         imagePosition: 'center 15%',
+        linkedin: 'https://www.linkedin.com/in/tronan-rejendran/',
       },
       {
         name: 'Nia Zahra binti Shamsul Muhardzi',
         role: 'Vice Treasurer',
         image: '/members/nia_zahra.jpg',
         imagePosition: 'center 15%',
+        linkedin: 'https://www.linkedin.com/in/nia-zahra-b06190385/',
       },
     ],
   },
@@ -153,14 +158,14 @@ function SectionHeading({
 }) {
   return (
     <div className="mb-8 max-w-2xl">
-      <p className={`mb-2 text-xs font-black uppercase tracking-widest ${isDark ? 'text-white/80' : 'text-purple-600'}`}>
+      <p className={`mb-2 text-xs font-black uppercase tracking-widest ${isDark ? 'text-white/80' : 'text-purple-600 dark:text-purple-400'}`}>
         {eyebrow}
       </p>
-      <h2 className={`text-3xl font-black uppercase tracking-tight md:text-5xl ${isDark ? 'text-white' : 'text-slate-900'}`}>
+      <h2 className={`text-3xl font-black uppercase tracking-tight md:text-5xl ${isDark ? 'text-white' : 'text-slate-900 dark:text-white'}`}>
         {title}
       </h2>
       {description ? (
-        <p className={`mt-4 text-base font-semibold leading-relaxed ${isDark ? 'text-white/90' : 'text-slate-700'}`}>
+        <p className={`mt-4 text-base font-semibold leading-relaxed ${isDark ? 'text-white/90' : 'text-slate-700 dark:text-slate-300'}`}>
           {description}
         </p>
       ) : null}
@@ -190,14 +195,14 @@ function CommitteeCard({
       aria-pressed={isSelected}
       className={`group w-full rounded-2xl border-2 p-4 text-left transition hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
         isSelected
-          ? 'border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]'
-          : 'border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)]'
+          ? 'border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]'
+          : 'border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] dark:hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.9)]'
       }`}
     >
       <div className="flex items-center gap-4">
         <div
-          className={`relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-slate-900 text-lg font-black uppercase ${
-            isSelected ? 'bg-slate-900 text-white' : 'bg-purple-100 text-slate-900'
+          className={`relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-slate-900 text-lg font-black uppercase dark:border-slate-700 ${
+            isSelected ? 'bg-slate-900 text-white dark:bg-slate-950' : 'bg-purple-100 text-slate-900 dark:bg-slate-800 dark:text-purple-300'
           }`}
         >
           {image ? (
@@ -218,14 +223,14 @@ function CommitteeCard({
         <div>
           <p
             className={`text-lg font-black uppercase tracking-tight ${
-              isSelected ? 'text-white' : 'text-slate-900'
+              isSelected ? 'text-white' : 'text-slate-900 dark:text-white'
             }`}
           >
             {name}
           </p>
           <p
             className={`text-sm font-bold ${
-              isSelected ? 'text-white/80' : 'text-purple-600'
+              isSelected ? 'text-white/80' : 'text-purple-600 dark:text-purple-400'
             }`}
           >
             {role}
@@ -241,7 +246,7 @@ export default function AboutPage() {
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <section className="rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:p-10">
+      <section className="rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:p-10 dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
         <SectionHeading
           eyebrow="About UMDAC"
           title="We help students turn data curiosity into real capability"
@@ -250,27 +255,27 @@ export default function AboutPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-            <p className="text-xs font-black uppercase tracking-widest text-purple-600">
+          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+            <p className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
               Mission
             </p>
-            <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700">
+            <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700 dark:text-slate-300">
               To make data and analytics skills accessible, practical, and empowering for all students.
             </p>
           </div>
-          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-            <p className="text-xs font-black uppercase tracking-widest text-purple-600">
+          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+            <p className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
               Purpose
             </p>
-            <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700">
+            <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700 dark:text-slate-300">
               To empower members through projects, workshops, mentorship, and meaningful community building.
             </p>
           </div>
-          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
-            <p className="text-xs font-black uppercase tracking-widest text-purple-600">
+          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+            <p className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
               Impact
             </p>
-            <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700">
+            <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700 dark:text-slate-300">
               To connect theory with application so members can grow into confident, industry-ready contributors.
             </p>
           </div>
@@ -287,7 +292,7 @@ export default function AboutPage() {
           <div className="space-y-10">
             {committeeByDepartment.map(({ department, members }) => (
               <div key={department}>
-                <p className="mb-4 text-base sm:text-lg font-black uppercase tracking-wide text-purple-600">
+                <p className="mb-4 text-base sm:text-lg font-black uppercase tracking-wide text-purple-600 dark:text-purple-400">
                   {department}
                 </p>
                 <div className="grid gap-5 md:grid-cols-2">
@@ -308,7 +313,7 @@ export default function AboutPage() {
           </div>
 
           {/* Sticky Member Detail Panel */}
-          <aside className="h-fit overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:sticky lg:top-24">
+          <aside className="h-fit overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:sticky lg:top-24 dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
             {/* Image Header with bottom fade */}
             <div className="relative h-64 sm:h-72 w-full overflow-hidden bg-slate-900">
               {selected.image ? (

@@ -23,15 +23,15 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mx-auto grid w-full max-w-6xl overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:grid-cols-2">
-        <div className="p-8 text-white md:p-10 border-b-4 border-slate-900 lg:border-b-0 lg:border-r-4">
+    <main className="min-h-screen flex items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8 dark:bg-slate-950">
+      <div className="mx-auto grid w-full max-w-6xl overflow-hidden rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] lg:grid-cols-2 dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
+        <div className="p-8 text-white md:p-10 border-b-4 border-slate-900 lg:border-b-0 lg:border-r-4 dark:border-slate-800">
           <p className="text-xs font-black uppercase tracking-widest text-white/80">Welcome back</p>
           <h1 className="mt-4 text-4xl font-black uppercase tracking-tight md:text-5xl">Access your UMDAC account</h1>
           <p className="mt-4 max-w-md text-base font-semibold leading-relaxed text-white/90">
             Continue your learning journey, register for events, and stay connected with the club community.
           </p>
-          <div className="mt-8 rounded-xl border-2 border-slate-900 bg-slate-900 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)]">
+          <div className="mt-8 rounded-xl border-2 border-slate-900 bg-slate-900 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-950">
             <p className="text-xs font-black uppercase tracking-widest text-purple-400">New to the club?</p>
             <p className="mt-2 text-3xl font-black uppercase tracking-tight text-white">Join now</p>
             <p className="mt-2 text-sm font-semibold text-slate-300">Create an account to access events, updates, and opportunities.</p>
@@ -56,7 +56,7 @@ export default function LoginPage() {
                 autoComplete="email"
                 placeholder="testing123@gmail.com"
                 required
-                className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${error ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`}
+                className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${error ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`}
               />
             </div>
 
@@ -71,7 +71,7 @@ export default function LoginPage() {
                 autoComplete="current-password"
                 placeholder="••••••••••••••"
                 required
-                className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${error ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400'}`}
+                className={`w-full rounded-xl border-2 px-4 py-3 text-base font-bold outline-none transition shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] ${error ? 'border-red-500 bg-[#78132B] text-white placeholder-white/70' : 'border-slate-900 bg-white text-slate-900 placeholder-slate-400 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder-slate-500'}`}
               />
             </div>
 
@@ -90,7 +90,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-3 text-base font-black uppercase tracking-widest text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-0 active:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] disabled:cursor-not-allowed disabled:opacity-80"
+              className="inline-flex w-full items-center justify-center rounded-xl border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-3 text-base font-black uppercase tracking-widest text-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-0 active:shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] disabled:cursor-not-allowed disabled:opacity-80 dark:border-slate-700"
             >
               {loading ? 'Authenticating...' : 'Log In'}
             </button>
