@@ -59,6 +59,19 @@ const committeeByDepartment: DepartmentGroup[] = [
     ],
   },
   {
+    department: 'Technical & Systems',
+    members: [
+      { name: 'Kisshore Nair A/L Sashitharan', role: 'Director', image: '/members/T&S/Kisshore_Director (Edited).jpg' },
+      { name: 'Chin Shi Er', role: 'Technical Associate', image: '/members/T&S/Chin Shi Er_Technical Associate (Edited).jpg' },
+      { name: 'Shaif Ahmad Bin Tufail Ahmad', role: 'Technical Associate', image: '/members/T&S/Shaif Ahmad Bin Tufail Ahmad_Technical Associate (Edited).jpg' },
+      { name: 'Sanchay A/L Ravindran', role: 'Technical Associate', image: '/members/T&S/Sanchay A_L Ravindran_Technical Associate (Edited).jpg' },
+      { name: 'Madhaeys A/L Sathiamoorthy', role: 'Technical Associate', image: '/members/T&S/Madhaeys A_L Sathiamoorthy_Technical Associate (Edited).jpg' },
+      { name: 'Muhammad Rehan Ferdian', role: 'Technical Associate', image: '/members/T&S/Muhammad Rehan Ferdian_Technical  Associate (Edited).jpg' },
+      { name: 'John Wong Sie Wei', role: 'Technical Associate', image: '/members/T&S/John Wong Sie Wei_Technical Associate (Edited).jpg' },
+      { name: 'Wan Muhammad Hazwan Bin Wan Rozli', role: 'Technical Associate', image: '/members/T&S/Wan Muhammad Hazwan BIn Wan Rozli_Technical Associate (Edited).jpg' },
+    ],
+  },
+  {
     department: 'Creative & Marketing',
     members: [
       { name: 'Wong Lin Wei', role: 'Director', image: '/members/C&M/Wong Lin Wei_Director(Edited).jpg' },
@@ -123,19 +136,6 @@ const committeeByDepartment: DepartmentGroup[] = [
       { name: 'Husna Wajihah Binti Abu Talib', role: 'Event Operations Associate', image: '/members/EM/Husna Wajihah Binti Abu Talib_Event Operations Associate (Edited).jpg' },
       { name: 'Nur Batrisyia Binti Mohd Sukri', role: 'Event Operations Associate', image: '/members/EM/Nur Batrisyia Binti Mohd Sukri_Event Operations Associates (Edited).jpg' },
       { name: 'Natasha Adilla Binti Hishsamsuri', role: 'Event Operations Associate', image: '/members/EM/Natasha Adilla Binti Hishsamsuri_Event Operations Associates (Edited).jpg' },
-    ],
-  },
-  {
-    department: 'Technical & Systems',
-    members: [
-      { name: 'Kisshore Nair A/L Sashitharan', role: 'Director', image: '/members/T&S/Kisshore_Director (Edited).jpg' },
-      { name: 'Chin Shi Er', role: 'Technical Associate', image: '/members/T&S/Chin Shi Er_Technical Associate (Edited).jpg' },
-      { name: 'Shaif Ahmad Bin Tufail Ahmad', role: 'Technical Associate', image: '/members/T&S/Shaif Ahmad Bin Tufail Ahmad_Technical Associate (Edited).jpg' },
-      { name: 'Sanchay A/L Ravindran', role: 'Technical Associate', image: '/members/T&S/Sanchay A_L Ravindran_Technical Associate (Edited).jpg' },
-      { name: 'Madhaeys A/L Sathiamoorthy', role: 'Technical Associate', image: '/members/T&S/Madhaeys A_L Sathiamoorthy_Technical Associate (Edited).jpg' },
-      { name: 'Muhammad Rehan Ferdian', role: 'Technical Associate', image: '/members/T&S/Muhammad Rehan Ferdian_Technical  Associate (Edited).jpg' },
-      { name: 'John Wong Sie Wei', role: 'Technical Associate', image: '/members/T&S/John Wong Sie Wei_Technical Associate (Edited).jpg' },
-      { name: 'Wan Muhammad Hazwan Bin Wan Rozli', role: 'Technical Associate', image: '/members/T&S/Wan Muhammad Hazwan BIn Wan Rozli_Technical Associate (Edited).jpg' },
     ],
   },
 ]

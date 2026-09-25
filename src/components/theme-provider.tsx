@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = 'light' | 'dark'
 
 interface ThemeContextType {
   theme: Theme
@@ -14,19 +14,14 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 const STORAGE_KEY = 'umdac-theme'
 
-function getSystemTheme(): 'light' | 'dark' {
-  if (typeof window === 'undefined') return 'light'
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-}
-
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('system')
+  const [theme, setThemeState] = useState<Theme>('light')
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null
-    if (stored && (stored === 'light' || stored === 'dark' || stored === 'system')) {
+    if (stored === 'light' || stored === 'dark') {
       setThemeState(stored)
     }
     setMounted(true)
@@ -36,10 +31,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = document.documentElement
 
     const applyTheme = (currentTheme: Theme) => {
-      const activeTheme = currentTheme === 'system' ? getSystemTheme() : currentTheme
-      setResolvedTheme(activeTheme)
+      setResolvedTheme(currentTheme)
 
-      if (activeTheme === 'dark') {
+      if (currentTheme === 'dark') {
         root.classList.add('dark')
       } else {
         root.classList.remove('dark')
@@ -47,16 +41,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     applyTheme(theme)
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleSystemChange = () => {
-      if (theme === 'system') {
-        applyTheme('system')
-      }
-    }
-
-    mediaQuery.addEventListener('change', handleSystemChange)
-    return () => mediaQuery.removeEventListener('change', handleSystemChange)
   }, [theme])
 
   const setTheme = (newTheme: Theme) => {

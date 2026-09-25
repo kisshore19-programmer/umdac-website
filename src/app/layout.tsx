@@ -29,8 +29,7 @@ const themeScript = `
   (function() {
     try {
       var stored = localStorage.getItem('umdac-theme');
-      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (stored === 'dark' || (!stored && prefersDark) || (stored === 'system' && prefersDark)) {
+      if (stored === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
