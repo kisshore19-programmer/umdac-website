@@ -14,8 +14,11 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'UMDAC | Decode. Transform. Excel.',
-  description: 'University Malaya Data Analytics Club community website for events, learning, and opportunities.',
+  title: {
+    default: 'Home | UMDAC',
+    template: '%s | UMDAC',
+  },
+  description: 'Universiti Malaya Data Analytics Club community website for events, learning, and opportunities.',
   icons: {
     icon: '/umdac_logo.png',
     shortcut: '/umdac_logo.png',

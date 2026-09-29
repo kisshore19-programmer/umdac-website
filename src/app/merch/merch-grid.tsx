@@ -15,15 +15,15 @@ function MerchCard({
 
   return (
     <div className="group relative">
-      <article className="overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 group-hover:-translate-y-1 group-hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+      <article className="overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition-all duration-300 ease-out group-hover:-translate-y-1.5 group-hover:shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] dark:group-hover:shadow-[8px_8px_0px_0px_rgba(168,85,247,0.3)]">
         {/* Image area */}
-        <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+        <div className="relative h-52 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           {item.image_url ? (
             <Image
               src={item.image_url}
               alt={item.name}
               fill
-              className="object-cover transition duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
@@ -39,11 +39,11 @@ function MerchCard({
 
         {/* Content */}
         <div className="bg-slate-950 px-5 py-4">
-          <h3 className="text-sm font-extrabold uppercase tracking-wide text-white">
+          <h3 className="text-sm font-black uppercase tracking-wide text-white transition-colors duration-200 group-hover:text-purple-300">
             {item.name}
           </h3>
           {item.description && (
-            <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-slate-400">
+            <p className="mt-1.5 line-clamp-2 text-xs font-medium leading-relaxed text-slate-400">
               {item.description}
             </p>
           )}
@@ -55,7 +55,7 @@ function MerchCard({
               id={`merch-have-a-look-${item.merch_id}`}
               type="button"
               onClick={onHaveALook}
-              className="rounded-lg border-2 border-purple-500 bg-transparent px-3 py-1.5 text-xs font-extrabold uppercase tracking-widest text-purple-400 transition hover:border-purple-400 hover:bg-purple-500/10 hover:text-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+              className="shimmer-button rounded-lg border-2 border-purple-500 bg-transparent px-3.5 py-1.5 text-xs font-black uppercase tracking-widest text-purple-400 transition-all duration-200 hover:border-purple-400 hover:bg-purple-500/15 hover:text-purple-300 hover:-translate-y-0.5 active:translate-y-px focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-950 cursor-pointer"
             >
               Have a Look →
             </button>

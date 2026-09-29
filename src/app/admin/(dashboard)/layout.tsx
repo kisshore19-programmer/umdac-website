@@ -1,7 +1,12 @@
+import type { Metadata } from 'next'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import { createClient } from '@/lib/supabase/server'
 import { isUserAdmin } from '@/app/actions/auth'
 import { redirect } from 'next/navigation'
+
+export const metadata: Metadata = {
+  title: 'Admin Dashboard',
+}
 
 export default async function AdminDashboardLayout({
   children,

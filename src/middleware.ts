@@ -27,9 +27,6 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh auth session token
-  const { data: { user } } = await supabase.auth.getUser()
-
   const url = request.nextUrl.clone()
   const isAuthPage = 
     url.pathname.startsWith('/login') || 
@@ -39,9 +36,28 @@ export async function middleware(request: NextRequest) {
   // Define public pages that guests can view
   const isPublicPage = 
     url.pathname === '/' ||
+    url.pathname === '/home' ||
     url.pathname.startsWith('/about') ||
     url.pathname.startsWith('/events') ||
     url.pathname.startsWith('/merch')
+
+  const hasAuthCookie = request.cookies.getAll().some((c) => c.name.includes('sb-') || c.name.includes('supabase'))
+
+  // If no auth cookie exists, skip the network round-trip to Supabase
+  if (!hasAuthCookie) {
+    if (!isAuthPage && !isPublicPage) {
+      if (url.pathname.startsWith('/admin')) {
+        url.pathname = '/admin/login'
+      } else {
+        url.pathname = '/login'
+      }
+      return NextResponse.redirect(url)
+    }
+    return supabaseResponse
+  }
+
+  // Refresh auth session token only when cookies exist
+  const { data: { user } } = await supabase.auth.getUser()
 
   // 1. If not logged in and trying to access a protected page -> Redirect to appropriate login
   if (!user && !isAuthPage && !isPublicPage) {

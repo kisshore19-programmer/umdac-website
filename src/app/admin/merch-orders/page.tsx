@@ -1,5 +1,10 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { MerchOrderList } from '@/components/admin/MerchOrderList'
+
+export const metadata: Metadata = {
+  title: 'Merch Orders',
+}
 
 export default async function MerchOrdersPage() {
   const supabase = await createClient()

@@ -68,7 +68,7 @@ export function EventCard({
   imageUrl?: string
 }) {
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] dark:hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.9)]">
+    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] dark:hover:shadow-[8px_8px_0px_0px_rgba(168,85,247,0.4)]">
       <div className="relative h-48 shrink-0 overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-5 text-white">
         {imageUrl ? (
           <>
@@ -76,15 +76,15 @@ export function EventCard({
             <img
               src={imageUrl}
               alt={title}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-900/30 to-slate-950/20" />
           </>
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600" />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 transition-transform duration-500 ease-out group-hover:scale-105" />
         )}
         <div className="relative z-10 flex h-full items-start justify-between gap-3">
-          <span className="rounded bg-black/60 backdrop-blur-sm px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white border border-white/20">
+          <span className="rounded bg-black/60 backdrop-blur-md px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-widest text-white border border-white/20 transition-transform duration-200 group-hover:translate-x-0.5">
             {type}
           </span>
           <StatusBadge status={status} />
@@ -93,14 +93,14 @@ export function EventCard({
       <div className="flex flex-1 flex-col justify-between p-5">
         <div className="space-y-2">
           <p className="text-xs font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">{date}</p>
-          <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white line-clamp-2">{title}</h3>
+          <h3 className="text-xl font-black uppercase tracking-tight text-slate-900 dark:text-white line-clamp-2 transition-colors duration-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400">{title}</h3>
           <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{location}</p>
           <p className="text-sm leading-6 text-slate-600 dark:text-slate-300 line-clamp-3">{description}</p>
         </div>
         <div className="pt-4">
           <Link
             href={href}
-            className="inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-px dark:border-slate-700"
+            className="shimmer-button inline-flex items-center justify-center rounded-lg border-2 border-slate-900 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-4 py-2 text-sm font-extrabold uppercase tracking-wider text-white shadow-[2px_2px_0px_0px_rgba(15,23,42,1)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] focus:outline-none active:translate-y-px dark:border-slate-700"
           >
             View details
           </Link>

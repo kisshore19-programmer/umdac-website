@@ -193,15 +193,15 @@ function CommitteeCard({
       type="button"
       onClick={onSelect}
       aria-pressed={isSelected}
-      className={`group w-full rounded-2xl border-2 p-4 text-left transition hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 ${
+      className={`group w-full rounded-2xl border-2 p-4 text-left transition-all duration-300 ease-out hover:-translate-y-1.5 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 cursor-pointer ${
         isSelected
-          ? 'border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]'
-          : 'border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] dark:hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,0.9)]'
+          ? 'border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 text-white shadow-[6px_6px_0px_0px_rgba(15,23,42,1)] dark:border-slate-700 dark:shadow-[6px_6px_0px_0px_rgba(168,85,247,0.6)]'
+          : 'border-slate-900 bg-white shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] hover:shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)] dark:hover:shadow-[8px_8px_0px_0px_rgba(168,85,247,0.3)]'
       }`}
     >
       <div className="flex items-center gap-4">
         <div
-          className={`relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-slate-900 text-lg font-black uppercase dark:border-slate-700 ${
+          className={`relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl border-2 border-slate-900 text-lg font-black uppercase transition-transform duration-300 group-hover:scale-105 dark:border-slate-700 ${
             isSelected ? 'bg-slate-900 text-white dark:bg-slate-950' : 'bg-purple-100 text-slate-900 dark:bg-slate-800 dark:text-purple-300'
           }`}
         >
@@ -209,7 +209,9 @@ function CommitteeCard({
             <img
               src={image}
               alt={name}
-              className="h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
               style={{ objectPosition: imagePosition }}
             />
           ) : (
@@ -222,14 +224,14 @@ function CommitteeCard({
         </div>
         <div>
           <p
-            className={`text-lg font-black uppercase tracking-tight ${
-              isSelected ? 'text-white' : 'text-slate-900 dark:text-white'
+            className={`text-base sm:text-lg font-black uppercase tracking-tight transition-colors duration-200 ${
+              isSelected ? 'text-white' : 'text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400'
             }`}
           >
             {name}
           </p>
           <p
-            className={`text-sm font-bold ${
+            className={`text-xs sm:text-sm font-bold ${
               isSelected ? 'text-white/80' : 'text-purple-600 dark:text-purple-400'
             }`}
           >
@@ -246,6 +248,7 @@ export default function AboutPage() {
 
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      {/* Hero Header */}
       <section className="rounded-2xl border-4 border-slate-900 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-6 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:p-10 dark:border-slate-800 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
         <SectionHeading
           eyebrow="About UMDAC"
@@ -255,25 +258,25 @@ export default function AboutPage() {
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
-            <p className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
-              Mission
+          <div className="group rounded-2xl border-2 border-slate-900 bg-white/95 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] backdrop-blur transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900/90 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+            <p className="text-xs font-black uppercase tracking-widest text-indigo-600 transition-transform duration-200 group-hover:translate-x-0.5 dark:text-indigo-400">
+              ✦ Mission
             </p>
             <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700 dark:text-slate-300">
               To make data and analytics skills accessible, practical, and empowering for all students.
             </p>
           </div>
-          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
-            <p className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
-              Purpose
+          <div className="group rounded-2xl border-2 border-slate-900 bg-white/95 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] backdrop-blur transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900/90 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+            <p className="text-xs font-black uppercase tracking-widest text-purple-600 transition-transform duration-200 group-hover:translate-x-0.5 dark:text-purple-400">
+              ✦ Purpose
             </p>
             <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700 dark:text-slate-300">
               To empower members through projects, workshops, mentorship, and meaningful community building.
             </p>
           </div>
-          <div className="rounded-xl border-2 border-slate-900 bg-purple-50 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
-            <p className="text-xs font-black uppercase tracking-widest text-purple-600 dark:text-purple-400">
-              Impact
+          <div className="group rounded-2xl border-2 border-slate-900 bg-white/95 p-6 shadow-[4px_4px_0px_0px_rgba(15,23,42,1)] backdrop-blur transition-all duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] dark:border-slate-800 dark:bg-slate-900/90 dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,0.8)]">
+            <p className="text-xs font-black uppercase tracking-widest text-pink-600 transition-transform duration-200 group-hover:translate-x-0.5 dark:text-pink-400">
+              ✦ Impact
             </p>
             <p className="mt-4 text-base font-semibold leading-relaxed text-slate-700 dark:text-slate-300">
               To connect theory with application so members can grow into confident, industry-ready contributors.
@@ -319,9 +322,10 @@ export default function AboutPage() {
               {selected.image ? (
                 <>
                   <img
+                    key={selected.image}
                     src={selected.image}
                     alt={selected.name}
-                    className="h-full w-full object-cover object-top"
+                    className="animate-fade-in-up h-full w-full object-cover object-top"
                   />
                   {/* Gentle bottom-only fade to card body */}
                   <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent pointer-events-none" />
@@ -359,7 +363,7 @@ export default function AboutPage() {
                   href={selected.linkedin || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2.5 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white bg-white/15 px-4 py-2.5 text-xs sm:text-sm font-black uppercase tracking-wider text-white backdrop-blur transition hover:bg-white hover:text-slate-900 active:translate-y-0.5 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]"
+                  className="shimmer-button mt-2.5 inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-white bg-white/15 px-4 py-2.5 text-xs sm:text-sm font-black uppercase tracking-wider text-white backdrop-blur transition-all duration-200 hover:bg-white hover:text-slate-900 active:translate-y-0.5 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]"
                 >
                   <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3" />

@@ -1,5 +1,10 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { ApplicantTable } from '@/components/admin/ApplicantTable'
+
+export const metadata: Metadata = {
+  title: 'Manage Applicants',
+}
 
 export default async function ApplicantsPage({
   searchParams,

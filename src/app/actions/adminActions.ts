@@ -304,15 +304,14 @@ async function getNextEventId(supabase: any): Promise<number> {
 export async function fetchAdminEventsAction(): Promise<AdminEventRecord[]> {
   const supabase = await createClient()
 
-  const { data: events } = await supabase
-    .from('events')
-    .select('*')
-    .order('date', { ascending: false })
+  // Run queries in parallel for minimum latency
+  const [eventsResult, appCountsResult] = await Promise.all([
+    supabase.from('events').select('*').order('date', { ascending: false }),
+    supabase.from('applications').select('event_id, user_id'),
+  ])
 
-  // Count distinct user registrations per event
-  const { data: appCounts } = await supabase
-    .from('applications')
-    .select('event_id, user_id')
+  const events = eventsResult.data
+  const appCounts = appCountsResult.data
 
   const countMap: Record<number, number> = {}
   const seenUsersPerEvent = new Set<string>()

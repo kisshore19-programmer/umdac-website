@@ -1,6 +1,11 @@
+import type { Metadata } from 'next'
 import { createClient } from '@/lib/supabase/server'
 import { getAdminMembers } from '@/lib/supabase/queries/members'
 import MemberTable from '@/components/admin/MemberTable'
+
+export const metadata: Metadata = {
+  title: 'Club Members',
+}
 
 export default async function MembersPage() {
   const supabase = await createClient()

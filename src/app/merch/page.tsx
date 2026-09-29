@@ -4,7 +4,7 @@ import { MerchGrid } from './merch-grid'
 import type { MerchItem } from './merch-modal'
 
 export const metadata: Metadata = {
-  title: 'Merch | UMDAC',
+  title: 'Merch',
   description: "Support the club and take home a keepsake that reflects UMDAC's identity & community.",
 }
 

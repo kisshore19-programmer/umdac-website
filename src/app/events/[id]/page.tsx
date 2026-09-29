@@ -210,9 +210,9 @@ export async function generateMetadata({ params }: EventPageProps): Promise<Meta
   const { id } = await params
   const supabase = await createClient()
   const event = await resolveEvent(supabase, id)
-  if (!event) return { title: 'Event Not Found | UMDAC' }
+  if (!event) return { title: 'Event Not Found' }
   return {
-    title: `${event.title} | UMDAC`,
+    title: event.title,
     description: event.description ?? undefined,
   }
 }
