@@ -25,9 +25,6 @@ const pillars = [
 ]
 
 export function HomeView({ initialEvents = [] }: { initialEvents: AdminEventRecord[] }) {
-  const [introFinished, setIntroFinished] = useState(false)
-  const [introSrc, setIntroSrc] = useState('')
-  const [imageLoaded, setImageLoaded] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [dbEvents] = useState<AdminEventRecord[]>(initialEvents)
 
@@ -48,57 +45,10 @@ export function HomeView({ initialEvents = [] }: { initialEvents: AdminEventReco
     }
   }, [])
 
-  useEffect(() => {
-    // Force browser to restart the animated WebP from frame 0 on mount
-    setIntroSrc('/umdac_intro.webp?t=' + Date.now())
-  }, [])
-
-  useEffect(() => {
-    if (imageLoaded && !introFinished) {
-      const timer = setTimeout(() => {
-        setIntroFinished(true)
-      }, 7000) // play intro animation for 7.0 seconds after image loads
-      return () => clearTimeout(timer)
-    }
-  }, [imageLoaded, introFinished])
-
-  const handleSkipIntro = () => {
-    setIntroFinished(true)
-  }
-
   return (
     <main className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Hero Section */}
       <section className="relative overflow-hidden rounded-2xl border-4 border-slate-900 bg-white p-8 shadow-[8px_8px_0px_0px_rgba(15,23,42,1)] md:p-14 dark:border-slate-800 dark:bg-slate-900 dark:shadow-[8px_8px_0px_0px_rgba(0,0,0,0.8)]">
-        {/* Intro WebP Overlay */}
-        <div
-          onClick={handleSkipIntro}
-          className={`absolute inset-0 z-20 flex items-center justify-center bg-white dark:bg-slate-950 transition-opacity duration-700 ${
-            introFinished ? 'opacity-0 pointer-events-none' : 'opacity-100 cursor-pointer'
-          }`}
-        >
-          {introSrc && (
-            <img 
-              src={introSrc} 
-              alt="UMDAC Loading..." 
-              className="w-full h-full object-cover"
-              onLoad={() => setImageLoaded(true)}
-            />
-          )}
-          {!introFinished && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                handleSkipIntro()
-              }}
-              className="absolute bottom-4 right-4 z-30 rounded-full border border-slate-700 bg-slate-900/80 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur transition hover:bg-slate-800"
-            >
-              Skip Intro ✕
-            </button>
-          )}
-        </div>
-
         <div className="grid gap-10 lg:grid-cols-[1.3fr_0.7fr]">
           <div className="flex flex-col justify-center">
             <span className="mb-3 inline-flex w-fit items-center rounded bg-slate-100 px-2.5 py-1 text-xs font-extrabold uppercase tracking-widest text-indigo-600 dark:bg-slate-800 dark:text-indigo-400">
